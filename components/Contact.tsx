@@ -307,7 +307,7 @@ export default function Contact() {
 
             {/* Phone */}
             <a
-              href="tel:+60120924898"
+              href="tel:+601120924898"
               className="contact-card contact-card-phone"
             >
               <div className="contact-icon contact-icon-phone">
@@ -317,7 +317,7 @@ export default function Contact() {
               </div>
               <div className="contact-card-text">
                 <span className="contact-card-platform">Phone</span>
-                <span className="contact-card-value">+60 12-092 4898</span>
+                <span className="contact-card-value">+60 11 2092 4898</span>
               </div>
               <span className="contact-card-arrow">↗</span>
             </a>

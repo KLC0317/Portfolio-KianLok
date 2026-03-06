@@ -1,206 +1,217 @@
-'use client'
+"use client";
 
-import { useEffect, useRef, useState } from 'react'
-import Image from 'next/image'
+import { useEffect, useRef, useState } from "react";
+import Image from "next/image";
 
 const education = [
   {
-    school: 'Monash University Malaysia',
-    degree: 'Bachelor of Computer Science',
-    period: 'Feb 2024 – Present',
-    grade: 'CGPA 4.00',
-    sub: 'WAM: 88.667',
-    logo: '/awards/monash.png',
-    color: 'purple',
+    school: "Monash University Malaysia",
+    degree: "Bachelor of Computer Science",
+    period: "Feb 2024 – Present",
+    grade: "CGPA 4.00",
+    sub: "WAM: 88.667",
+    logo: "/awards/monash.png",
+    color: "purple",
     highlights: [
-      'Perfect CGPA of 4.00 across all semesters',
-      'IT Dean\'s Achievement Award 2024',
-      'Unit Award — Highest mark in MAT1841',
-      'Top 10 Finalists — Monash L\'Oréal Datathon',
+      "Perfect CGPA of 4.00 across all semesters",
+      "IT Dean's Achievement Award 2024",
+      "Unit Award — Highest mark in MAT1841",
+      "Top 10 Finalists — Monash L'Oréal Datathon",
     ],
-    tags: ['Computer Science', 'AI & ML', 'Full-Stack', 'Research'],
+    tags: ["Computer Science", "AI & ML", "Full-Stack", "Research"],
   },
   {
-    school: 'Taylor\'s College',
-    degree: 'GCE A-Level',
-    period: 'Aug 2022 – Nov 2023',
-    grade: '4A*',
-    sub: '96% Average',
-    logo: '/awards/a-level.png',
-    color: 'cyan',
+    school: "Taylor's College",
+    degree: "GCE A-Level",
+    period: "Aug 2022 – Nov 2023",
+    grade: "4A*",
+    sub: "96% Average",
+    logo: "/awards/a-level.png",
+    color: "cyan",
     highlights: [
-      'Achieved 4A* across all A-Level subjects',
-      '96% overall average — Top Achiever award',
-      'JPA LSPM Scholarship recipient',
-      'Strong foundation in Mathematics & Sciences',
+      "Achieved 4A* across all A-Level subjects",
+      "96% overall average — Top Achiever award",
+      "JPA LSPM Scholarship recipient",
+      "Strong foundation in Mathematics & Sciences",
     ],
-    tags: ['Mathematics', 'Physics', 'Chemistry', 'Further Maths'],
+    tags: ["Mathematics", "Physics", "Chemistry", "Further Maths"],
   },
   {
-    school: 'SMK Sung Siew Sandakan',
-    degree: 'SPM (Sijil Pelajaran Malaysia)',
-    period: 'Jan 2017 – Apr 2022',
-    grade: '10A+',
-    sub: 'All distinctions',
-    logo: '/awards/sungsiew.png',
-    color: 'pink',
+    school: "SMK Sung Siew Sandakan",
+    degree: "SPM (Sijil Pelajaran Malaysia)",
+    period: "Jan 2017 – Apr 2022",
+    grade: "10A+",
+    sub: "All distinctions",
+    logo: "/awards/sungsiew.png",
+    color: "pink",
     highlights: [
-      'Achieved 10A+ across all SPM subjects',
-      'JPA LSPM Scholarship — minimum 8A+ required',
-      'Consistent academic excellence throughout',
-      'Strong groundwork in STEM disciplines',
+      "Achieved 10A+ across all SPM subjects",
+      "JPA LSPM Scholarship — minimum 8A+ required",
+      "Consistent academic excellence throughout",
+      "Strong groundwork in STEM disciplines",
     ],
-    tags: ['SPM', 'STEM', 'State Top 1', 'Sciences'],
+    tags: ["SPM", "STEM", "State Top 1", "Sciences"],
   },
-]
+];
 
 const stats = [
-  { value: '4.00', label: 'CGPA', color: 'purple' },
-  { value: '88.7', label: 'WAM %', color: 'cyan' },
-  { value: '4A*',  label: 'A-Level', color: 'pink' },
-  { value: '10A+', label: 'SPM', color: 'gold' },
-]
+  { value: "4.00", label: "CGPA", color: "purple" },
+  { value: "88.7", label: "WAM %", color: "cyan" },
+  { value: "4A*", label: "A-Level", color: "pink" },
+  { value: "10A+", label: "SPM", color: "gold" },
+];
 
 const colorMap = {
   purple: {
-    border:      'rgba(168,85,247,0.28)',
-    borderHover: 'rgba(168,85,247,0.65)',
-    bg:          'rgba(168,85,247,0.06)',
-    glow:        'rgba(168,85,247,0.20)',
-    glowStrong:  'rgba(168,85,247,0.45)',
-    accent:      '#c084fc',
-    gradientTop: 'rgba(168,85,247,0.80)',
-    gradientMid: 'rgba(192,132,252,0.50)',
-    tagBg:       'rgba(168,85,247,0.12)',
-    tagBorder:   'rgba(192,132,252,0.30)',
-    tagColor:    '#f3e8ff',
-    dotColor:    '#c084fc',
-    dotGlow:     'rgba(192,132,252,0.70)',
-    statGrad:    'linear-gradient(110deg, #f0abfc 0%, #c084fc 50%, #818cf8 100%)',
-    shimmer:     'rgba(168,85,247,0.15)',
-    cardGlow:    '168,85,247',
+    border: "rgba(168,85,247,0.28)",
+    borderHover: "rgba(168,85,247,0.65)",
+    bg: "rgba(168,85,247,0.06)",
+    glow: "rgba(168,85,247,0.20)",
+    glowStrong: "rgba(168,85,247,0.45)",
+    accent: "#c084fc",
+    gradientTop: "rgba(168,85,247,0.80)",
+    gradientMid: "rgba(192,132,252,0.50)",
+    tagBg: "rgba(168,85,247,0.12)",
+    tagBorder: "rgba(192,132,252,0.30)",
+    tagColor: "#f3e8ff",
+    dotColor: "#c084fc",
+    dotGlow: "rgba(192,132,252,0.70)",
+    statGrad: "linear-gradient(110deg, #f0abfc 0%, #c084fc 50%, #818cf8 100%)",
+    shimmer: "rgba(168,85,247,0.15)",
+    cardGlow: "168,85,247",
   },
   cyan: {
-    border:      'rgba(103,232,249,0.24)',
-    borderHover: 'rgba(103,232,249,0.60)',
-    bg:          'rgba(103,232,249,0.05)',
-    glow:        'rgba(103,232,249,0.16)',
-    glowStrong:  'rgba(103,232,249,0.40)',
-    accent:      '#67e8f9',
-    gradientTop: 'rgba(103,232,249,0.75)',
-    gradientMid: 'rgba(56,189,248,0.45)',
-    tagBg:       'rgba(103,232,249,0.10)',
-    tagBorder:   'rgba(165,243,252,0.26)',
-    tagColor:    '#cffafe',
-    dotColor:    '#67e8f9',
-    dotGlow:     'rgba(103,232,249,0.65)',
-    statGrad:    'linear-gradient(110deg, #a5f3fc 0%, #67e8f9 50%, #38bdf8 100%)',
-    shimmer:     'rgba(103,232,249,0.12)',
-    cardGlow:    '103,232,249',
+    border: "rgba(103,232,249,0.24)",
+    borderHover: "rgba(103,232,249,0.60)",
+    bg: "rgba(103,232,249,0.05)",
+    glow: "rgba(103,232,249,0.16)",
+    glowStrong: "rgba(103,232,249,0.40)",
+    accent: "#67e8f9",
+    gradientTop: "rgba(103,232,249,0.75)",
+    gradientMid: "rgba(56,189,248,0.45)",
+    tagBg: "rgba(103,232,249,0.10)",
+    tagBorder: "rgba(165,243,252,0.26)",
+    tagColor: "#cffafe",
+    dotColor: "#67e8f9",
+    dotGlow: "rgba(103,232,249,0.65)",
+    statGrad: "linear-gradient(110deg, #a5f3fc 0%, #67e8f9 50%, #38bdf8 100%)",
+    shimmer: "rgba(103,232,249,0.12)",
+    cardGlow: "103,232,249",
   },
   pink: {
-    border:      'rgba(236,72,153,0.24)',
-    borderHover: 'rgba(236,72,153,0.58)',
-    bg:          'rgba(236,72,153,0.05)',
-    glow:        'rgba(236,72,153,0.16)',
-    glowStrong:  'rgba(236,72,153,0.38)',
-    accent:      '#f9a8d4',
-    gradientTop: 'rgba(236,72,153,0.75)',
-    gradientMid: 'rgba(244,114,182,0.45)',
-    tagBg:       'rgba(236,72,153,0.10)',
-    tagBorder:   'rgba(249,168,212,0.28)',
-    tagColor:    '#fce7f3',
-    dotColor:    '#f9a8d4',
-    dotGlow:     'rgba(249,168,212,0.65)',
-    statGrad:    'linear-gradient(110deg, #fbcfe8 0%, #f9a8d4 50%, #ec4899 100%)',
-    shimmer:     'rgba(236,72,153,0.12)',
-    cardGlow:    '236,72,153',
+    border: "rgba(236,72,153,0.24)",
+    borderHover: "rgba(236,72,153,0.58)",
+    bg: "rgba(236,72,153,0.05)",
+    glow: "rgba(236,72,153,0.16)",
+    glowStrong: "rgba(236,72,153,0.38)",
+    accent: "#f9a8d4",
+    gradientTop: "rgba(236,72,153,0.75)",
+    gradientMid: "rgba(244,114,182,0.45)",
+    tagBg: "rgba(236,72,153,0.10)",
+    tagBorder: "rgba(249,168,212,0.28)",
+    tagColor: "#fce7f3",
+    dotColor: "#f9a8d4",
+    dotGlow: "rgba(249,168,212,0.65)",
+    statGrad: "linear-gradient(110deg, #fbcfe8 0%, #f9a8d4 50%, #ec4899 100%)",
+    shimmer: "rgba(236,72,153,0.12)",
+    cardGlow: "236,72,153",
   },
   gold: {
-    border:      'rgba(251,191,36,0.28)',
-    borderHover: 'rgba(251,191,36,0.62)',
-    bg:          'rgba(251,191,36,0.06)',
-    glow:        'rgba(251,191,36,0.18)',
-    glowStrong:  'rgba(251,191,36,0.42)',
-    accent:      '#fcd34d',
-    gradientTop: 'rgba(251,191,36,0.80)',
-    gradientMid: 'rgba(245,158,11,0.45)',
-    tagBg:       'rgba(251,191,36,0.10)',
-    tagBorder:   'rgba(252,211,77,0.28)',
-    tagColor:    '#fef3c7',
-    dotColor:    '#fcd34d',
-    dotGlow:     'rgba(252,211,77,0.65)',
-    statGrad:    'linear-gradient(110deg, #fde68a 0%, #fcd34d 50%, #f59e0b 100%)',
-    shimmer:     'rgba(251,191,36,0.14)',
-    cardGlow:    '251,191,36',
+    border: "rgba(251,191,36,0.28)",
+    borderHover: "rgba(251,191,36,0.62)",
+    bg: "rgba(251,191,36,0.06)",
+    glow: "rgba(251,191,36,0.18)",
+    glowStrong: "rgba(251,191,36,0.42)",
+    accent: "#fcd34d",
+    gradientTop: "rgba(251,191,36,0.80)",
+    gradientMid: "rgba(245,158,11,0.45)",
+    tagBg: "rgba(251,191,36,0.10)",
+    tagBorder: "rgba(252,211,77,0.28)",
+    tagColor: "#fef3c7",
+    dotColor: "#fcd34d",
+    dotGlow: "rgba(252,211,77,0.65)",
+    statGrad: "linear-gradient(110deg, #fde68a 0%, #fcd34d 50%, #f59e0b 100%)",
+    shimmer: "rgba(251,191,36,0.14)",
+    cardGlow: "251,191,36",
   },
-}
+};
 
 /* ─── tiny hook: observe when element enters viewport ─── */
 function useInView(threshold = 0.15) {
-  const ref = useRef<HTMLDivElement>(null)
-  const [inView, setInView] = useState(false)
+  const ref = useRef<HTMLDivElement>(null);
+  const [inView, setInView] = useState(false);
   useEffect(() => {
-    const el = ref.current
-    if (!el) return
+    const el = ref.current;
+    if (!el) return;
     const obs = new IntersectionObserver(
-      ([entry]) => { if (entry.isIntersecting) setInView(true) },
-      { threshold }
-    )
-    obs.observe(el)
-    return () => obs.disconnect()
-  }, [threshold])
-  return { ref, inView }
+      ([entry]) => {
+        if (entry.isIntersecting) setInView(true);
+      },
+      { threshold },
+    );
+    obs.observe(el);
+    return () => obs.disconnect();
+  }, [threshold]);
+  return { ref, inView };
 }
 
 /* ─── Animated number counter ─── */
 function Counter({ value, inView }: { value: string; inView: boolean }) {
-  const [display, setDisplay] = useState('0')
-  const numericMatch = value.match(/[\d.]+/)
-  const numeric = numericMatch ? parseFloat(numericMatch[0]) : null
-  const prefix = ''
-  const suffix = value.replace(/[\d.]+/, '')
+  const [display, setDisplay] = useState("0");
+  const numericMatch = value.match(/[\d.]+/);
+  const numeric = numericMatch ? parseFloat(numericMatch[0]) : null;
+  const prefix = "";
+  const suffix = value.replace(/[\d.]+/, "");
 
   useEffect(() => {
-    if (!inView || numeric === null) { setDisplay(value); return }
-    let start = 0
-    const duration = 1400
-    const step = 16
-    const total = Math.ceil(duration / step)
-    let frame = 0
+    if (!inView || numeric === null) {
+      setDisplay(value);
+      return;
+    }
+    let start = 0;
+    const duration = 1400;
+    const step = 16;
+    const total = Math.ceil(duration / step);
+    let frame = 0;
     const timer = setInterval(() => {
-      frame++
-      const progress = frame / total
-      const eased = 1 - Math.pow(1 - progress, 3)
-      const current = eased * numeric
+      frame++;
+      const progress = frame / total;
+      const eased = 1 - Math.pow(1 - progress, 3);
+      const current = eased * numeric;
       const formatted = Number.isInteger(numeric)
         ? Math.round(current).toString()
-        : current.toFixed(2)
-      setDisplay(prefix + formatted + suffix)
-      if (frame >= total) { setDisplay(value); clearInterval(timer) }
-    }, step)
-    return () => clearInterval(timer)
-  }, [inView, value, numeric, prefix, suffix])
+        : current.toFixed(2);
+      setDisplay(prefix + formatted + suffix);
+      if (frame >= total) {
+        setDisplay(value);
+        clearInterval(timer);
+      }
+    }, step);
+    return () => clearInterval(timer);
+  }, [inView, value, numeric, prefix, suffix]);
 
-  return <>{display}</>
+  return <>{display}</>;
 }
 
 export default function Academics() {
-  const { ref: wrapRef, inView } = useInView(0.05)
-  const [hoveredCard, setHoveredCard] = useState<number | null>(null)
-  const [mousePos, setMousePos] = useState({ x: 0, y: 0 })
-  const cardRefs = useRef<(HTMLDivElement | null)[]>([])
+  const { ref: wrapRef, inView } = useInView(0.05);
+  const [hoveredCard, setHoveredCard] = useState<number | null>(null);
+  const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
+  const cardRefs = useRef<(HTMLDivElement | null)[]>([]);
 
   /* Track mouse per-card for spotlight effect */
-  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>, idx: number) => {
-    const card = cardRefs.current[idx]
-    if (!card) return
-    const rect = card.getBoundingClientRect()
+  const handleMouseMove = (
+    e: React.MouseEvent<HTMLDivElement>,
+    idx: number,
+  ) => {
+    const card = cardRefs.current[idx];
+    if (!card) return;
+    const rect = card.getBoundingClientRect();
     setMousePos({
       x: e.clientX - rect.left,
       y: e.clientY - rect.top,
-    })
-  }
+    });
+  };
 
   const css = `
     @keyframes fadeUp {
@@ -252,7 +263,7 @@ export default function Academics() {
 
     .acad-wrap {
       width: 100%;
-      min-height: 100vh;
+      min-height: auto;
       display: flex;
       flex-direction: column;
       justify-content: center;
@@ -330,7 +341,7 @@ export default function Academics() {
     }
     .acad-subtitle {
       font-size: 0.82rem;
-      color: rgba(255,255,255,0.28);
+      color: #ffffff;
       margin-top: 0.4rem;
       letter-spacing: 0.01em;
     }
@@ -400,14 +411,13 @@ export default function Academics() {
       letter-spacing: -0.04em;
       line-height: 1;
     }
-.acad-stat-label {
-  font-size: 0.58rem;
-  font-weight: 500;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  color: #ffffff;  /* was rgba(255,255,255,0.28) */
-}
-
+    .acad-stat-label {
+      font-size: 0.58rem;
+      font-weight: 500;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: #ffffff;
+    }
 
     /* ── Cards grid ── */
     .acad-cards {
@@ -680,27 +690,615 @@ export default function Academics() {
       background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='1'/%3E%3C/svg%3E");
     }
 
-    @media (max-width: 860px) {
-      .acad-cards { grid-template-columns: 1fr 1fr; }
-      .acad-stats  { justify-content: center; }
-    }
-    @media (max-width: 520px) {
-      .acad-cards { grid-template-columns: 1fr; }
-      .acad-wrap  { padding: 5rem 1.25rem 3rem; }
-    }
-  `
+/* Tablet landscape and below (1024px) */
+@media (max-width: 1024px) {
+  .acad-wrap {
+    padding: 3rem clamp(1.5rem, 5vw, 4rem) 2.5rem;
+    min-height: auto;
+  }
+  
+  .acad-title {
+    font-size: clamp(1.5rem, 4vw, 2.2rem);
+  }
+  
+  .acad-cards {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+  }
+  
+  .acad-orb-1 {
+    width: 400px;
+    height: 400px;
+  }
+  
+  .acad-orb-2 {
+    width: 350px;
+    height: 350px;
+  }
+}
+
+/* Tablet portrait (860px) */
+@media (max-width: 860px) {
+  .acad-wrap {
+    padding: 2.5rem 1.5rem 2rem;
+  }
+  
+  .acad-header {
+    margin-bottom: 1.5rem;
+  }
+  
+  .acad-title {
+    font-size: clamp(1.4rem, 5vw, 2rem);
+  }
+  
+  .acad-subtitle {
+    font-size: 0.78rem;
+  }
+  
+  .acad-stats {
+    justify-content: flex-start;
+    gap: 0.6rem;
+    margin-bottom: 1.5rem;
+  }
+  
+  .acad-stat {
+    padding: 0.65rem 1.2rem;
+  }
+  
+  .acad-stat-value {
+    font-size: 1.3rem;
+  }
+  
+  .acad-stat-label {
+    font-size: 0.54rem;
+  }
+  
+  .acad-cards {
+    gap: 0.85rem;
+  }
+  
+  .acad-card-body {
+    padding: 1.2rem;
+    gap: 0.8rem;
+  }
+}
+
+/* Large mobile (640px) - Left aligned, compact cards */
+@media (max-width: 640px) {
+  .acad-wrap {
+    padding: 2rem 1rem 1.5rem;
+    min-height: auto;
+  }
+  
+  .acad-header {
+    margin-bottom: 1rem;
+    text-align: left;
+  }
+  
+  .acad-section-label {
+    font-size: 0.58rem;
+    gap: 0.35rem;
+    margin-bottom: 0.4rem;
+    justify-content: flex-start;
+  }
+  
+  .acad-label-line {
+    width: 12px;
+  }
+  
+  .acad-title {
+    font-size: 1.4rem;
+    text-align: left;
+    line-height: 1.2;
+  }
+  
+  .acad-subtitle {
+    font-size: 0.70rem;
+    margin-top: 0.25rem;
+    text-align: left;
+  }
+  
+  /* Stats - Left aligned, compact */
+  .acad-stats {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.45rem;
+    margin-bottom: 1rem;
+    justify-content: flex-start;
+  }
+  
+  .acad-stat {
+    padding: 0.45rem 0.85rem;
+    border-radius: 10px;
+    flex: 0 0 auto;
+  }
+  
+  .acad-stat-value {
+    font-size: 1.05rem;
+  }
+  
+  .acad-stat-label {
+    font-size: 0.47rem;
+    letter-spacing: 0.10em;
+  }
+  
+  /* Cards - Single column, reduced height */
+  .acad-cards {
+    grid-template-columns: 1fr;
+    gap: 0.7rem;
+  }
+  
+  .acad-card {
+    border-radius: 12px;
+  }
+  
+  .acad-card-spotlight {
+    border-radius: 12px;
+  }
+  
+  .acad-card-bar {
+    height: 2px;
+  }
+  
+  /* Hide decorative elements */
+  .acad-card-corner {
+    display: none;
+  }
+  
+  .acad-card-body {
+    padding: 0.75rem;
+    gap: 0.5rem;
+  }
+  
+  /* Compact card top */
+  .acad-card-top {
+    flex-direction: row;
+    align-items: center;
+    gap: 0.6rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+  }
+  
+  .acad-logo-wrap {
+    width: 38px;
+    height: 38px;
+  }
+  
+  .acad-logo-bg {
+    width: 38px;
+    height: 38px;
+    border-radius: 9px;
+  }
+  
+  .acad-logo-img {
+    width: 22px;
+    height: 22px;
+  }
+  
+  .acad-logo-pulse {
+    inset: -2px;
+    border-radius: 11px;
+  }
+  
+  /* Grade pill - compact inline */
+  .acad-grade-pill {
+    margin-left: auto;
+    flex-direction: row;
+    align-items: baseline;
+    gap: 0.25rem;
+  }
+  
+  .acad-grade-value {
+    font-size: 0.90rem;
+  }
+  
+  .acad-grade-sub {
+    font-size: 0.48rem;
+    color: rgba(255,255,255,0.32);
+  }
+  
+  /* School info - compact */
+  .acad-card-info {
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+  }
+  
+  .acad-card-school {
+    font-size: 0.83rem;
+    line-height: 1.2;
+  }
+  
+  .acad-card-degree {
+    font-size: 0.61rem;
+    margin-top: 0;
+    line-height: 1.25;
+  }
+  
+  .acad-card-period {
+    margin-top: 0.25rem;
+    padding: 0.10rem 0.38rem;
+    font-size: 0.51rem;
+    gap: 0.2rem;
+  }
+  
+  .acad-period-dot {
+    width: 2.5px;
+    height: 2.5px;
+  }
+  
+  /* Remove divider */
+  .acad-divider {
+    display: none;
+  }
+  
+  /* Highlights - very compact, show only 2 */
+  .acad-highlights {
+    gap: 0.3rem;
+  }
+  
+  .acad-highlight {
+    font-size: 0.60rem;
+    gap: 0.38rem;
+    line-height: 1.35;
+  }
+  
+  .acad-highlight-dot {
+    width: 2.5px;
+    height: 2.5px;
+    margin-top: 0.3rem;
+  }
+  
+  /* Show only first 2 highlights on mobile */
+  .acad-highlight:nth-child(n+3) {
+    display: none;
+  }
+  
+  /* Tags - compact, show fewer */
+  .acad-tags {
+    gap: 0.2rem;
+    padding-top: 0.1rem;
+  }
+  
+  .acad-tag {
+    font-size: 0.49rem;
+    padding: 0.09rem 0.32rem;
+    border-radius: 5px;
+  }
+  
+  /* Hide tags after 3rd one */
+  .acad-tag:nth-child(n+4) {
+    display: none;
+  }
+  
+  /* Reduce ambient effects */
+  .acad-card-ambient {
+    display: none;
+  }
+  
+  .acad-orb-1 {
+    width: 250px;
+    height: 250px;
+    top: -40px;
+    right: -40px;
+    filter: blur(45px);
+    opacity: 0.5;
+  }
+  
+  .acad-orb-2 {
+    width: 220px;
+    height: 220px;
+    bottom: -35px;
+    left: -35px;
+    filter: blur(45px);
+    opacity: 0.5;
+  }
+  
+  /* Minimal hover effects */
+  .acad-stat:hover {
+    transform: translateY(-1px) scale(1.01);
+  }
+  
+  .acad-card:hover .acad-logo-img {
+    transform: scale(1.02);
+  }
+  
+  .acad-card:hover .acad-highlight-dot {
+    transform: scale(1.1);
+  }
+  
+  .acad-tag:hover {
+    transform: none;
+  }
+}
+
+/* Mobile (480px and below) - Ultra compact */
+@media (max-width: 480px) {
+  .acad-wrap {
+    padding: 1.75rem 0.85rem 1.25rem;
+  }
+  
+  .acad-header {
+    margin-bottom: 0.85rem;
+  }
+  
+  .acad-section-label {
+    font-size: 0.56rem;
+    letter-spacing: 0.20em;
+    margin-bottom: 0.35rem;
+  }
+  
+  .acad-title {
+    font-size: 1.3rem;
+  }
+  
+  .acad-subtitle {
+    font-size: 0.67rem;
+    margin-top: 0.2rem;
+  }
+  
+  .acad-stats {
+    gap: 0.4rem;
+    margin-bottom: 0.85rem;
+  }
+  
+  .acad-stat {
+    padding: 0.4rem 0.75rem;
+  }
+  
+  .acad-stat-value {
+    font-size: 1rem;
+  }
+  
+  .acad-stat-label {
+    font-size: 0.45rem;
+  }
+  
+  .acad-cards {
+    gap: 0.6rem;
+  }
+  
+  .acad-card {
+    border-radius: 11px;
+  }
+  
+  .acad-card-body {
+    padding: 0.7rem;
+    gap: 0.45rem;
+  }
+  
+  .acad-card-top {
+    padding-bottom: 0.45rem;
+    gap: 0.55rem;
+  }
+  
+  .acad-logo-wrap,
+  .acad-logo-bg {
+    width: 36px;
+    height: 36px;
+  }
+  
+  .acad-logo-img {
+    width: 20px;
+    height: 20px;
+  }
+  
+  .acad-grade-value {
+    font-size: 0.86rem;
+  }
+  
+  .acad-grade-sub {
+    font-size: 0.46rem;
+  }
+  
+  .acad-card-school {
+    font-size: 0.80rem;
+  }
+  
+  .acad-card-degree {
+    font-size: 0.59rem;
+  }
+  
+  .acad-card-period {
+    font-size: 0.49rem;
+    padding: 0.09rem 0.35rem;
+    margin-top: 0.22rem;
+  }
+  
+  .acad-highlights {
+    gap: 0.28rem;
+  }
+  
+  .acad-highlight {
+    font-size: 0.58rem;
+    gap: 0.35rem;
+  }
+  
+  .acad-tags {
+    gap: 0.18rem;
+  }
+  
+  .acad-tag {
+    font-size: 0.47rem;
+    padding: 0.08rem 0.30rem;
+  }
+}
+
+/* Extra small mobile (360px and below) */
+@media (max-width: 360px) {
+  .acad-wrap {
+    padding: 1.5rem 0.75rem 1rem;
+  }
+  
+  .acad-header {
+    margin-bottom: 0.75rem;
+  }
+  
+  .acad-title {
+    font-size: 1.2rem;
+  }
+  
+  .acad-subtitle {
+    font-size: 0.65rem;
+  }
+  
+  .acad-stats {
+    gap: 0.35rem;
+    margin-bottom: 0.75rem;
+  }
+  
+  .acad-stat {
+    padding: 0.38rem 0.7rem;
+  }
+  
+  .acad-stat-value {
+    font-size: 0.95rem;
+  }
+  
+  .acad-stat-label {
+    font-size: 0.43rem;
+  }
+  
+  .acad-cards {
+    gap: 0.55rem;
+  }
+  
+  .acad-card-body {
+    padding: 0.65rem;
+    gap: 0.4rem;
+  }
+  
+  .acad-card-top {
+    padding-bottom: 0.4rem;
+  }
+  
+  .acad-logo-wrap,
+  .acad-logo-bg {
+    width: 34px;
+    height: 34px;
+  }
+  
+  .acad-logo-img {
+    width: 19px;
+    height: 19px;
+  }
+  
+  .acad-grade-value {
+    font-size: 0.82rem;
+  }
+  
+  .acad-grade-sub {
+    font-size: 0.44rem;
+  }
+  
+  .acad-card-school {
+    font-size: 0.78rem;
+  }
+  
+  .acad-card-degree {
+    font-size: 0.57rem;
+  }
+  
+  .acad-card-period {
+    font-size: 0.47rem;
+  }
+  
+  .acad-highlight {
+    font-size: 0.56rem;
+  }
+  
+  .acad-tag {
+    font-size: 0.45rem;
+    padding: 0.07rem 0.28rem;
+  }
+}
+
+/* Landscape orientation - very compact */
+@media (max-height: 600px) and (orientation: landscape) {
+  .acad-wrap {
+    padding: 1.5rem 1.5rem 1.25rem;
+    min-height: auto;
+  }
+  
+  .acad-header {
+    margin-bottom: 0.75rem;
+  }
+  
+  .acad-title {
+    font-size: 1.3rem;
+  }
+  
+  .acad-stats {
+    margin-bottom: 0.75rem;
+    gap: 0.4rem;
+  }
+  
+  .acad-stat {
+    padding: 0.35rem 0.7rem;
+  }
+  
+  .acad-cards {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.6rem;
+  }
+  
+  .acad-card-body {
+    padding: 0.65rem;
+    gap: 0.4rem;
+  }
+  
+  .acad-highlights {
+    gap: 0.25rem;
+  }
+  
+  .acad-highlight {
+    font-size: 0.56rem;
+  }
+  
+  .acad-orb-1,
+  .acad-orb-2 {
+    opacity: 0.3;
+  }
+}
+
+/* Reduce motion for accessibility */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+  
+  .acad-orb {
+    animation: none;
+  }
+  
+  .acad-logo-pulse {
+    animation: none;
+  }
+  
+  .acad-period-dot {
+    animation: none;
+  }
+  
+  .acad-title span {
+    animation: none;
+  }
+}
+  `;
 
   return (
     <>
       <style dangerouslySetInnerHTML={{ __html: css }} />
       <div className="acad-wrap" ref={wrapRef}>
-
         {/* Ambient background orbs */}
-        <div className={`acad-orb acad-orb-1 ${inView ? 'visible' : ''}`} />
-        <div className={`acad-orb acad-orb-2 ${inView ? 'visible' : ''}`} />
+        <div className={`acad-orb acad-orb-1 ${inView ? "visible" : ""}`} />
+        <div className={`acad-orb acad-orb-2 ${inView ? "visible" : ""}`} />
 
         {/* ── Header ── */}
-        <div className={`acad-header ${inView ? 'visible' : ''}`}>
+        <div className={`acad-header ${inView ? "visible" : ""}`}>
           <div className="acad-section-label">
             <span className="acad-label-line" />
             Education
@@ -708,63 +1306,73 @@ export default function Academics() {
           <h2 className="acad-title">
             Academic <span>Background</span>
           </h2>
-          <p className="acad-subtitle" style={{ color: '#ffffff' }}>A journey of consistent excellence across every stage</p>
+          <p className="acad-subtitle">
+            A journey of consistent excellence across every stage
+          </p>
         </div>
 
         {/* ── Stats bar ── */}
-        <div className={`acad-stats ${inView ? 'visible' : ''}`}>
+        <div className={`acad-stats ${inView ? "visible" : ""}`}>
           {stats.map((s, i) => {
-            const c = colorMap[s.color as keyof typeof colorMap]
+            const c = colorMap[s.color as keyof typeof colorMap];
             return (
               <div
                 key={i}
                 className="acad-stat"
-                style={{ '--stat-color': c.cardGlow } as React.CSSProperties}
-                onMouseEnter={e => {
-                  e.currentTarget.style.borderColor = c.borderHover
-                  e.currentTarget.style.boxShadow  = `0 8px 32px rgba(${c.cardGlow},0.22), inset 0 1px 0 rgba(255,255,255,0.06)`
+                style={{ "--stat-color": c.cardGlow } as React.CSSProperties}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.borderColor = c.borderHover;
+                  e.currentTarget.style.boxShadow = `0 8px 32px rgba(${c.cardGlow},0.22), inset 0 1px 0 rgba(255,255,255,0.06)`;
                 }}
-                onMouseLeave={e => {
-                  e.currentTarget.style.borderColor = 'rgba(255,255,255,0.07)'
-                  e.currentTarget.style.boxShadow   = 'none'
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.borderColor = "rgba(255,255,255,0.07)";
+                  e.currentTarget.style.boxShadow = "none";
                 }}
               >
                 <div className="acad-stat-shimmer" />
                 {/* Top accent line */}
-                <div style={{
-                  position: 'absolute', top: 0, left: '20%', right: '20%',
-                  height: '1px',
-                  background: `linear-gradient(90deg, transparent, ${c.accent}, transparent)`,
-                }} />
+                <div
+                  style={{
+                    position: "absolute",
+                    top: 0,
+                    left: "20%",
+                    right: "20%",
+                    height: "1px",
+                    background: `linear-gradient(90deg, transparent, ${c.accent}, transparent)`,
+                  }}
+                />
                 <div
                   className="acad-stat-value"
                   style={{
                     background: c.statGrad,
-                    WebkitBackgroundClip: 'text',
-                    WebkitTextFillColor: 'transparent',                    backgroundClip: 'text',
+                    WebkitBackgroundClip: "text",
+                    WebkitTextFillColor: "transparent",
+                    backgroundClip: "text",
                   }}
                 >
                   <Counter value={s.value} inView={inView} />
                 </div>
                 <div className="acad-stat-label">{s.label}</div>
               </div>
-            )
+            );
           })}
         </div>
 
         {/* ── Education Cards ── */}
         <div className="acad-cards">
           {education.map((edu, idx) => {
-            const c = colorMap[edu.color as keyof typeof colorMap]
-            const isHovered = hoveredCard === idx
+            const c = colorMap[edu.color as keyof typeof colorMap];
+            const isHovered = hoveredCard === idx;
 
             return (
               <div
                 key={idx}
-                ref={el => { cardRefs.current[idx] = el }}
-                className={`acad-card ${inView ? 'visible' : ''}`}
+                ref={(el) => {
+                  cardRefs.current[idx] = el;
+                }}
+                className={`acad-card ${inView ? "visible" : ""}`}
                 style={{
-                  transitionDelay: inView ? `${idx * 0.10}s` : '0s',
+                  transitionDelay: inView ? `${idx * 0.1}s` : "0s",
                   borderColor: isHovered ? c.borderHover : undefined,
                   boxShadow: isHovered
                     ? `0 0 0 1px rgba(${c.cardGlow},0.25), 0 20px 60px rgba(${c.cardGlow},0.18), 0 8px 24px rgba(0,0,0,0.40)`
@@ -772,7 +1380,7 @@ export default function Academics() {
                 }}
                 onMouseEnter={() => setHoveredCard(idx)}
                 onMouseLeave={() => setHoveredCard(null)}
-                onMouseMove={e => handleMouseMove(e, idx)}
+                onMouseMove={(e) => handleMouseMove(e, idx)}
               >
                 {/* Noise overlay */}
                 <div className="acad-card-noise" />
@@ -834,9 +1442,9 @@ export default function Academics() {
                         className="acad-grade-value"
                         style={{
                           background: c.statGrad,
-                          WebkitBackgroundClip: 'text',
-                          WebkitTextFillColor: 'transparent',
-                          backgroundClip: 'text',
+                          WebkitBackgroundClip: "text",
+                          WebkitTextFillColor: "transparent",
+                          backgroundClip: "text",
                         }}
                       >
                         {edu.grade}
@@ -855,7 +1463,7 @@ export default function Academics() {
                         style={{
                           background: c.dotColor,
                           boxShadow: `0 0 6px ${c.dotGlow}`,
-                          animation: 'dotPulse 2s ease-in-out infinite',
+                          animation: "dotPulse 2s ease-in-out infinite",
                         }}
                       />
                       {edu.period}
@@ -872,7 +1480,9 @@ export default function Academics() {
                           className="acad-highlight-dot"
                           style={{
                             background: c.dotColor,
-                            boxShadow: isHovered ? `0 0 8px ${c.dotGlow}` : 'none',
+                            boxShadow: isHovered
+                              ? `0 0 8px ${c.dotGlow}`
+                              : "none",
                           }}
                         />
                         {h}
@@ -898,11 +1508,10 @@ export default function Academics() {
                   </div>
                 </div>
               </div>
-            )
+            );
           })}
         </div>
       </div>
     </>
-  )
+  );
 }
-

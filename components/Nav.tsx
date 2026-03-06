@@ -246,9 +246,79 @@ nav::before {
               0 0 20px rgba(217,70,239,0.35);
 }
 
+/* ── Mobile Responsive ── */
+@media (max-width: 768px) {
+  nav {
+    padding: 1rem 1.5rem;
+  }
 
+  .nav-logo {
+    font-size: 0.85rem;
+    gap: 0.4rem;
+  }
+
+  .nav-logo-mark {
+    width: 24px;
+    height: 24px;
+    font-size: 0.65rem;
+  }
+
+  .nav-links {
+    display: none;
+  }
+
+  .nav-resume {
+    font-size: 0.70rem;
+    padding: 0.40rem 0.95rem;
+  }
+
+  /* Mobile dot nav - move to bottom */
+  .dot-nav {
+    right: auto;
+    left: 50%;
+    top: auto;
+    bottom: 1.5rem;
+    transform: translateX(-50%);
+    flex-direction: row;
+    gap: 0.5rem;
+  }
+
+  .dot-label {
+    display: none;
+  }
+
+  .dot {
+    width: 6px;
+    height: 6px;
+  }
+
+  .dot-nav-item.active-dot .dot {
+    width: 8px;
+    height: 8px;
+  }
+}
+
+@media (max-width: 480px) {
+  nav {
+    padding: 0.85rem 1rem;
+  }
+
+  .nav-logo {
+    font-size: 0.75rem;
+  }
+
+  .nav-logo-mark {
+    width: 22px;
+    height: 22px;
+    font-size: 0.60rem;
+  }
+
+  .nav-resume {
+    font-size: 0.65rem;
+    padding: 0.35rem 0.80rem;
+  }
+}
 `;
-
   return (
     <>
       <style dangerouslySetInnerHTML={{ __html: css }} />

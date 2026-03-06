@@ -1,40 +1,36 @@
-import Link from 'next/link'
-import { notFound } from 'next/navigation'
-import { projects, colorMap } from '../../../lib/projects-data'
+import Link from "next/link";
+import { notFound } from "next/navigation";
+import { projects, colorMap } from "../../../lib/projects-data";
 
 /* ── Static params ── */
 export function generateStaticParams() {
-  return projects.map(p => ({ slug: p.slug }))
+  return projects.map((p) => ({ slug: p.slug }));
 }
 
 /* ── Metadata ── */
 export async function generateMetadata({
   params,
 }: {
-  params: { slug: string }
+  params: { slug: string };
 }) {
-  const proj = projects.find(p => p.slug === params.slug)
-  if (!proj) return {}
+  const proj = projects.find((p) => p.slug === params.slug);
+  if (!proj) return {};
 
   return {
     title: `${proj.title} — Project`,
     description: proj.tagline,
-  }
+  };
 }
 
 /* ── Page ── */
-export default function ProjectPage({
-  params,
-}: {
-  params: { slug: string }
-}) {
-  const proj = projects.find(p => p.slug === params.slug)
-  if (!proj) notFound()
+export default function ProjectPage({ params }: { params: { slug: string } }) {
+  const proj = projects.find((p) => p.slug === params.slug);
+  if (!proj) notFound();
 
-  const c = colorMap[proj.color]
-  const currentIndex = projects.findIndex(p => p.slug === params.slug)
-  const prev = projects[currentIndex - 1] ?? null
-  const next = projects[currentIndex + 1] ?? null
+  const c = colorMap[proj.color];
+  const currentIndex = projects.findIndex((p) => p.slug === params.slug);
+  const prev = projects[currentIndex - 1] ?? null;
+  const next = projects[currentIndex + 1] ?? null;
 
   const css = `
   @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
@@ -496,76 +492,376 @@ export default function ProjectPage({
   .pd-footer-link.next:hover .pd-footer-arrow { transform: translateX(2px); }
 
 
-  /* Responsive */
+  /* ── Mobile Responsive ── */
   @media (max-width: 1024px) {
     .pd-content {
       grid-template-columns: 1fr;
       gap: 1.5rem;
     }
+    
     .pd-left {
       max-width: 500px;
       margin: 0 auto;
+      width: 100%;
     }
+    
     .pd-sections {
       max-height: 400px;
     }
   }
 
-  @media (max-width: 640px) {
+  @media (max-width: 768px) {
+    .pd-root {
+      height: auto;
+      min-height: 100vh;
+    }
+
+    .pd-shell {
+      height: auto;
+      min-height: 100vh;
+      padding: 0.8rem;
+    }
+
+    .pd-orb-1,
+    .pd-orb-2 {
+      opacity: 0.25;
+    }
+
+    .pd-orb-1 {
+      width: 280px;
+      height: 280px;
+    }
+
+    .pd-orb-2 {
+      width: 220px;
+      height: 220px;
+    }
+
+    .pd-grid {
+      background-size: 30px 30px;
+    }
+
+    .pd-nav {
+      margin-bottom: 0.6rem;
+      gap: 0.5rem;
+    }
+
+    .pd-back {
+      font-size: 0.58rem;
+      padding: 0.32rem 0.7rem;
+    }
+
+    .pd-nav-links {
+      width: 100%;
+      justify-content: flex-start;
+    }
+
+    .pd-btn {
+      font-size: 0.56rem;
+      padding: 0.32rem 0.6rem;
+      flex: 1;
+    }
+
+    .pd-content {
+      gap: 0.8rem;
+    }
+
+    .pd-left {
+      max-width: 100%;
+      gap: 0.6rem;
+    }
+
+    .pd-image-wrap {
+      border-radius: 10px;
+      aspect-ratio: 16/9;
+    }
+
+    .pd-image-placeholder {
+      font-size: 2.5rem;
+    }
+
     .pd-metrics {
       grid-template-columns: 1fr 1fr;
+      gap: 0.4rem;
     }
+
+    .pd-metric {
+      padding: 0.5rem;
+    }
+
+    .pd-metric-icon {
+      font-size: 0.85rem;
+      margin-bottom: 0.2rem;
+    }
+
+    .pd-metric-value {
+      font-size: 0.8rem;
+    }
+
+    .pd-metric-label {
+      font-size: 0.52rem;
+    }
+
+    .pd-right {
+      gap: 0.7rem;
+    }
+
+    .pd-title {
+      font-size: clamp(1.2rem, 5vw, 1.6rem);
+      margin-bottom: 0.25rem;
+    }
+
+    .pd-meta {
+      gap: 0.5rem;
+      margin-bottom: 0.4rem;
+    }
+
+    .pd-period {
+      font-size: 0.56rem;
+    }
+
+    .pd-status {
+      font-size: 0.52rem;
+      padding: 0.16rem 0.4rem;
+    }
+
+    .pd-tagline {
+      font-size: 0.72rem;
+      margin-bottom: 0.5rem;
+      line-height: 1.45;
+    }
+
+    .pd-tags {
+      gap: 0.22rem;
+    }
+
+    .bdg {
+      font-size: 0.52rem;
+      padding: 0.16rem 0.4rem;
+    }
+
+    .pd-sections {
+      max-height: none;
+      overflow-y: visible;
+      padding-right: 0;
+    }
+
+    .pd-section {
+      margin-bottom: 0.6rem;
+      padding: 0.7rem;
+      border-radius: 8px;
+    }
+
+    .pd-section:last-child {
+      margin-bottom: 0;
+    }
+
+    .pd-section h3 {
+      font-size: 0.75rem;
+      margin-bottom: 0.35rem;
+    }
+
+    .pd-section h3::before {
+      width: 2px;
+      height: 12px;
+    }
+
+    .pd-section p {
+      font-size: 0.68rem;
+      line-height: 1.5;
+    }
+
     .pd-footer {
       flex-direction: column;
+      gap: 0.5rem;
+      padding-top: 0.6rem;
+      margin-top: 0.4rem;
     }
+
     .pd-footer-link {
-      max-width: 100%;
+      width: 100%;
+      justify-content: center;
+      font-size: 0.62rem;
+      padding: 0.5rem 0.8rem;
+    }
+
+    .pd-footer-link.prev,
+    .pd-footer-link.next {
+      justify-content: center;
     }
   }
-  `
+
+  @media (max-width: 480px) {
+    .pd-shell {
+      padding: 0.7rem;
+    }
+
+    .pd-nav {
+      margin-bottom: 0.5rem;
+    }
+
+    .pd-back {
+      font-size: 0.56rem;
+      padding: 0.3rem 0.65rem;
+    }
+
+    .pd-btn {
+      font-size: 0.54rem;
+      padding: 0.3rem 0.55rem;
+    }
+
+    .pd-content {
+      gap: 0.7rem;
+    }
+
+    .pd-left {
+      gap: 0.5rem;
+    }
+
+    .pd-image-wrap {
+      border-radius: 8px;
+    }
+
+    .pd-metrics {
+      gap: 0.35rem;
+    }
+
+    .pd-metric {
+      padding: 0.45rem;
+    }
+
+    .pd-metric-icon {
+      font-size: 0.8rem;
+    }
+
+    .pd-metric-value {
+      font-size: 0.75rem;
+    }
+
+    .pd-metric-label {
+      font-size: 0.50rem;
+    }
+
+    .pd-right {
+      gap: 0.6rem;
+    }
+
+    .pd-title {
+      font-size: clamp(1.1rem, 6vw, 1.4rem);
+    }
+
+    .pd-meta {
+      gap: 0.45rem;
+    }
+
+    .pd-period {
+      font-size: 0.54rem;
+    }
+
+    .pd-status {
+      font-size: 0.50rem;
+    }
+
+    .pd-tagline {
+      font-size: 0.70rem;
+    }
+
+    .bdg {
+      font-size: 0.50rem;
+      padding: 0.15rem 0.38rem;
+    }
+
+    .pd-section {
+      padding: 0.6rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .pd-section h3 {
+      font-size: 0.72rem;
+    }
+
+    .pd-section p {
+      font-size: 0.66rem;
+    }
+
+    .pd-footer-link {
+      font-size: 0.60rem;
+      padding: 0.45rem 0.75rem;
+    }
+  }
+
+  @media (max-width: 380px) {
+    .pd-shell {
+      padding: 0.6rem;
+    }
+
+    .pd-title {
+      font-size: 1.05rem;
+    }
+
+    .pd-tagline {
+      font-size: 0.68rem;
+    }
+
+    .pd-section {
+      padding: 0.55rem;
+    }
+
+    .pd-section h3 {
+      font-size: 0.70rem;
+    }
+
+    .pd-section p {
+      font-size: 0.64rem;
+    }
+  }
+`;
 
   // Helper to get button config
   const getButtons = () => {
-    const buttons = []
-    
+    const buttons = [];
+
     if (proj.github) {
       buttons.push({
         href: proj.github,
         label: "GitHub",
-        className: "pd-btn-github"
-      })
+        className: "pd-btn-github",
+      });
     }
 
     if (proj.slug === "zestix-ai" && proj.live) {
       buttons.push({
         href: proj.live,
         label: "Live Demo",
-        className: "pd-btn-live"
-      })
-    } else if ((proj.slug === "brand-intelligence" || proj.slug === "safe-vision") && proj.documentation) {
+        className: "pd-btn-live",
+      });
+    } else if (
+      (proj.slug === "brand-intelligence" || proj.slug === "safe-vision") &&
+      proj.documentation
+    ) {
       buttons.push({
         href: proj.documentation,
         label: "Documentation",
-        className: "pd-btn-docs"
-      })
+        className: "pd-btn-docs",
+      });
     } else if (proj.slug === "peleesenet" && proj.pdf) {
       buttons.push({
         href: proj.pdf,
         label: "Research Paper",
-        className: "pd-btn-pdf"
-      })
+        className: "pd-btn-pdf",
+      });
     } else if (proj.live) {
       buttons.push({
         href: proj.live,
         label: "Live Demo",
-        className: "pd-btn-live"
-      })
+        className: "pd-btn-live",
+      });
     }
 
-    return buttons
-  }
+    return buttons;
+  };
 
-  const buttons = getButtons()
+  const buttons = getButtons();
 
   return (
     <>
@@ -577,7 +873,6 @@ export default function ProjectPage({
         <div className="pd-grid" />
 
         <div className="pd-shell">
-
           {/* Top Nav */}
           <div className="pd-nav">
             <Link href="/" className="pd-back">
@@ -601,28 +896,23 @@ export default function ProjectPage({
 
           {/* Main Content Grid */}
           <div className="pd-content">
-            
             {/* Left Column - Image & Metrics */}
             <div className="pd-left">
               <div className="pd-image-wrap">
                 {proj.image ? (
-                  <img
-                    src={proj.image}
-                    alt={proj.title}
-                    className="pd-image"
-                  />
+                  <img src={proj.image} alt={proj.title} className="pd-image" />
                 ) : (
-                  <div className="pd-image-placeholder">
-                    {proj.icon}
-                  </div>
+                  <div className="pd-image-placeholder">{proj.icon}</div>
                 )}
               </div>
 
               {proj.metrics && proj.metrics.length > 0 && (
                 <div className="pd-metrics">
-                  {proj.metrics.map(metric => (
+                  {proj.metrics.map((metric) => (
                     <div key={metric.label} className="pd-metric">
-                      {metric.icon && <span className="pd-metric-icon">{metric.icon}</span>}
+                      {metric.icon && (
+                        <span className="pd-metric-icon">{metric.icon}</span>
+                      )}
                       <div className="pd-metric-value">{metric.value}</div>
                       <div className="pd-metric-label">{metric.label}</div>
                     </div>
@@ -633,7 +923,6 @@ export default function ProjectPage({
 
             {/* Right Column - Content */}
             <div className="pd-right">
-              
               {/* Hero */}
               <div className="pd-hero">
                 <div className="pd-title">{proj.title}</div>
@@ -641,15 +930,18 @@ export default function ProjectPage({
                   <div className="pd-period">{proj.period}</div>
                   {proj.status && (
                     <div className="pd-status">
-                      {proj.status === "completed" ? "✓ Completed" : 
-                       proj.status === "in-progress" ? "⟳ In Progress" : "📦 Archived"}
+                      {proj.status === "completed"
+                        ? "✓ Completed"
+                        : proj.status === "in-progress"
+                          ? "⟳ In Progress"
+                          : "📦 Archived"}
                     </div>
                   )}
                 </div>
                 <div className="pd-tagline">{proj.overview}</div>
 
                 <div className="pd-tags">
-                  {proj.tags.map(tag => (
+                  {proj.tags.map((tag) => (
                     <span key={tag} className="bdg">
                       {tag}
                     </span>
@@ -659,7 +951,7 @@ export default function ProjectPage({
 
               {/* Scrollable Sections */}
               <div className="pd-sections">
-                {proj.sections.map(section => (
+                {proj.sections.map((section) => (
                   <div key={section.heading} className="pd-section">
                     <h3>{section.heading}</h3>
                     <p>{section.body}</p>
@@ -668,36 +960,35 @@ export default function ProjectPage({
               </div>
 
               {/* Footer Navigation */}
-<div className="pd-footer">
-    {prev ? (
-        <Link
-            href={`/projects/${prev.slug}`}
-            className="pd-footer-link prev"
-        >
-            <span className="pd-footer-arrow">←</span>
-            <span>{prev.title}</span>
-        </Link>
-    ) : <span />}
+              <div className="pd-footer">
+                {prev ? (
+                  <Link
+                    href={`/projects/${prev.slug}`}
+                    className="pd-footer-link prev"
+                  >
+                    <span className="pd-footer-arrow">←</span>
+                    <span>{prev.title}</span>
+                  </Link>
+                ) : (
+                  <span />
+                )}
 
-    {next ? (
-        <Link
-            href={`/projects/${next.slug}`}
-            className="pd-footer-link next"
-        >
-            <span>{next.title}</span>
-            <span className="pd-footer-arrow">→</span>
-        </Link>
-    ) : <span />}
-</div>
-
-
-
+                {next ? (
+                  <Link
+                    href={`/projects/${next.slug}`}
+                    className="pd-footer-link next"
+                  >
+                    <span>{next.title}</span>
+                    <span className="pd-footer-arrow">→</span>
+                  </Link>
+                ) : (
+                  <span />
+                )}
+              </div>
             </div>
-
           </div>
-
         </div>
       </div>
     </>
-  )
+  );
 }

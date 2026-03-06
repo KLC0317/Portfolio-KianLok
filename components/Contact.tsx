@@ -3,7 +3,7 @@
 export default function Contact() {
   return (
     <>
-      <style>{`
+<style>{`
         .contact-wrap {
           width: 100%;
           min-height: 100vh;
@@ -93,10 +93,6 @@ export default function Contact() {
           grid-template-columns: repeat(2, 1fr);
           gap: 0.85rem;
           max-width: 640px;
-        }
-
-        @media (max-width: 520px) {
-          .contact-cards { grid-template-columns: 1fr; }
         }
 
         .contact-card {
@@ -215,13 +211,379 @@ export default function Contact() {
           display: block;
           width: 28px;
           height: 1px;
-          color: rgba(255,255,255,0.65);
+          background: rgba(255,255,255,0.65);
         }
 
         @keyframes gradientShift {
           0%   { background-position: 0% 50%; }
           50%  { background-position: 100% 50%; }
           100% { background-position: 0% 50%; }
+        }
+
+        /* ═══════════════════════════════════════════════════════════════
+           MOBILE RESPONSIVE STYLES
+           ═══════════════════════════════════════════════════════════════ */
+
+        /* Tablet landscape (1024px) */
+        @media (max-width: 1024px) {
+          .contact-wrap {
+            padding: 4rem clamp(1.5rem, 5vw, 4rem) 3rem;
+          }
+          
+          .contact-headline {
+            font-size: clamp(1.8rem, 4.5vw, 2.8rem);
+          }
+          
+          .contact-sub {
+            font-size: 0.84rem;
+            margin-bottom: 2.5rem;
+          }
+        }
+
+        /* Tablet portrait (860px) */
+        @media (max-width: 860px) {
+          .contact-wrap {
+            padding: 3.5rem 1.5rem 2.5rem;
+          }
+          
+          .contact-headline {
+            font-size: clamp(1.6rem, 5vw, 2.4rem);
+          }
+          
+          .contact-sub {
+            font-size: 0.82rem;
+            margin-bottom: 2.2rem;
+          }
+          
+          .contact-cards {
+            gap: 0.75rem;
+          }
+          
+          .contact-card {
+            padding: 1.1rem 1.2rem;
+          }
+        }
+
+        /* Large mobile (640px) */
+        @media (max-width: 640px) {
+          .contact-wrap {
+            padding: 3rem 1rem 2rem;
+            min-height: auto;
+          }
+          
+          .contact-label {
+            font-size: 0.62rem;
+            gap: 0.4rem;
+            margin-bottom: 0.85rem;
+          }
+          
+          .contact-label-line {
+            width: 16px;
+          }
+          
+          .contact-headline {
+            font-size: 1.5rem;
+            line-height: 1.2;
+            margin-bottom: 0.5rem;
+          }
+          
+          .contact-sub {
+            font-size: 0.78rem;
+            line-height: 1.6;
+            margin-bottom: 1.8rem;
+            max-width: 100%;
+          }
+          
+          .contact-cards {
+            gap: 0.7rem;
+            max-width: 100%;
+          }
+          
+          .contact-card {
+            padding: 1rem 1.1rem;
+            border-radius: 14px;
+            gap: 0.85rem;
+          }
+          
+          .contact-icon {
+            width: 38px;
+            height: 38px;
+            border-radius: 9px;
+            font-size: 1rem;
+          }
+          
+          .contact-icon svg {
+            width: 16px;
+            height: 16px;
+          }
+          
+          .contact-card-platform {
+            font-size: 0.57rem;
+            letter-spacing: 0.14em;
+          }
+          
+          .contact-card-value {
+            font-size: 0.80rem;
+          }
+          
+          .contact-card-arrow {
+            font-size: 0.70rem;
+          }
+          
+          .contact-footer-note {
+            margin-top: 2.2rem;
+            font-size: 0.67rem;
+            gap: 0.5rem;
+          }
+          
+          .contact-footer-note::before {
+            width: 24px;
+          }
+          
+          .contact-orb-1 {
+            width: 350px;
+            height: 350px;
+            top: -70px;
+            left: -70px;
+            filter: blur(50px);
+          }
+          
+          .contact-orb-2 {
+            width: 300px;
+            height: 300px;
+            bottom: -60px;
+            right: -60px;
+            filter: blur(50px);
+          }
+        }
+
+        /* Mobile (520px) - Single column */
+        @media (max-width: 520px) {
+          .contact-wrap {
+            padding: 2.5rem 0.85rem 1.75rem;
+          }
+          
+          .contact-label {
+            font-size: 0.60rem;
+            margin-bottom: 0.75rem;
+          }
+          
+          .contact-headline {
+            font-size: 1.4rem;
+          }
+          
+          .contact-sub {
+            font-size: 0.75rem;
+            margin-bottom: 1.5rem;
+          }
+          
+          .contact-cards {
+            grid-template-columns: 1fr;
+            gap: 0.65rem;
+          }
+          
+          .contact-card {
+            padding: 0.95rem 1rem;
+            border-radius: 13px;
+          }
+          
+          .contact-icon {
+            width: 36px;
+            height: 36px;
+          }
+          
+          .contact-icon svg {
+            width: 15px;
+            height: 15px;
+          }
+          
+          .contact-card-platform {
+            font-size: 0.55rem;
+          }
+          
+          .contact-card-value {
+            font-size: 0.78rem;
+          }
+          
+          .contact-card-arrow {
+            font-size: 0.68rem;
+          }
+          
+          .contact-footer-note {
+            margin-top: 1.8rem;
+            font-size: 0.65rem;
+            flex-wrap: wrap;
+          }
+          
+          .contact-orb-1 {
+            width: 280px;
+            height: 280px;
+            top: -50px;
+            left: -50px;
+            filter: blur(45px);
+            opacity: 0.7;
+          }
+          
+          .contact-orb-2 {
+            width: 250px;
+            height: 250px;
+            bottom: -45px;
+            right: -45px;
+            filter: blur(45px);
+            opacity: 0.7;
+          }
+          
+          /* Reduce hover effects on mobile */
+          .contact-card:hover {
+            transform: translateY(-2px);
+          }
+        }
+
+        /* Small mobile (400px) */
+        @media (max-width: 400px) {
+          .contact-wrap {
+            padding: 2.25rem 0.75rem 1.5rem;
+          }
+          
+          .contact-label {
+            font-size: 0.58rem;
+            letter-spacing: 0.24em;
+          }
+          
+          .contact-headline {
+            font-size: 1.3rem;
+          }
+          
+          .contact-sub {
+            font-size: 0.72rem;
+            margin-bottom: 1.3rem;
+          }
+          
+          .contact-cards {
+            gap: 0.6rem;
+          }
+          
+          .contact-card {
+            padding: 0.9rem 0.95rem;
+            border-radius: 12px;
+            gap: 0.75rem;
+          }
+          
+          .contact-icon {
+            width: 34px;
+            height: 34px;
+          }
+          
+          .contact-icon svg {
+            width: 14px;
+            height: 14px;
+          }
+          
+          .contact-card-platform {
+            font-size: 0.53rem;
+          }
+          
+          .contact-card-value {
+            font-size: 0.75rem;
+          }
+          
+          .contact-card-arrow {
+            font-size: 0.65rem;
+          }
+          
+          .contact-footer-note {
+            margin-top: 1.5rem;
+            font-size: 0.63rem;
+            gap: 0.45rem;
+          }
+          
+          .contact-footer-note::before {
+            width: 20px;
+          }
+        }
+
+        /* Extra small mobile (360px) */
+        @media (max-width: 360px) {
+          .contact-wrap {
+            padding: 2rem 0.65rem 1.25rem;
+          }
+          
+          .contact-headline {
+            font-size: 1.2rem;
+          }
+          
+          .contact-sub {
+            font-size: 0.70rem;
+          }
+          
+          .contact-card {
+            padding: 0.85rem 0.9rem;
+          }
+          
+          .contact-icon {
+            width: 32px;
+            height: 32px;
+          }
+          
+          .contact-card-value {
+            font-size: 0.73rem;
+          }
+        }
+
+        /* Landscape orientation */
+        @media (max-height: 600px) and (orientation: landscape) {
+          .contact-wrap {
+            padding: 2rem 1.5rem 1.5rem;
+            min-height: auto;
+          }
+          
+          .contact-headline {
+            font-size: 1.4rem;
+            margin-bottom: 0.4rem;
+          }
+          
+          .contact-sub {
+            font-size: 0.74rem;
+            margin-bottom: 1.2rem;
+          }
+          
+          .contact-cards {
+            grid-template-columns: repeat(2, 1fr);
+            gap: 0.6rem;
+          }
+          
+          .contact-card {
+            padding: 0.8rem 0.9rem;
+          }
+          
+          .contact-footer-note {
+            margin-top: 1.2rem;
+            font-size: 0.62rem;
+          }
+          
+          .contact-orb-1,
+          .contact-orb-2 {
+            opacity: 0.4;
+          }
+        }
+
+        /* Reduce motion for accessibility */
+        @media (prefers-reduced-motion: reduce) {
+          .contact-card {
+            transition: border-color 0.25s ease, box-shadow 0.25s ease;
+          }
+          
+          .contact-card:hover {
+            transform: none;
+          }
+          
+          .contact-card-arrow {
+            transition: color 0.2s;
+          }
+          
+          .contact-card:hover .contact-card-arrow {
+            transform: none;
+          }
         }
       `}</style>
 

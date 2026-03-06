@@ -4,98 +4,109 @@ import Link from "next/link";
 import { projects, colorMap } from "../lib/projects-data";
 
 export default function Projects() {
-    const [active, setActive] = useState(0);
-    const [nextIndex, setNextIndex] = useState(null);
-    const [contentClass, setContentClass] = useState("is-visible");
-    const cardRef = useRef(null);
-    const wrapRef = useRef(null);
+  const [active, setActive] = useState(0);
+  const [nextIndex, setNextIndex] = useState(null);
+  const [contentClass, setContentClass] = useState("is-visible");
+  const [isMobile, setIsMobile] = useState(false);
+  const cardRef = useRef(null);
+  const wrapRef = useRef(null);
 
-    const proj = projects[active];
-    const c = colorMap[proj.color];
+  const proj = projects[active];
+  const c = colorMap[proj.color];
 
-    const handleTabChange = (i) => {
-        if (i === active || nextIndex !== null) return;
-        setNextIndex(i);
+  // Detect mobile screen size
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth <= 768);
     };
+    checkMobile();
+    window.addEventListener("resize", checkMobile);
+    return () => window.removeEventListener("resize", checkMobile);
+  }, []);
 
-    const handleNext = () => {
-        const next = (active + 1) % projects.length;
-        handleTabChange(next);
+  const handleTabChange = (i) => {
+    if (i === active || nextIndex !== null) return;
+    setNextIndex(i);
+  };
+
+  const handleNext = () => {
+    const next = (active + 1) % projects.length;
+    handleTabChange(next);
+  };
+
+  const handlePrev = () => {
+    const prev = (active - 1 + projects.length) % projects.length;
+    handleTabChange(prev);
+  };
+
+  useEffect(() => {
+    if (nextIndex === null) return;
+    setContentClass("is-exiting");
+    const t1 = setTimeout(() => {
+      setActive(nextIndex);
+      setContentClass("is-entering");
+    }, 180);
+    const t2 = setTimeout(() => {
+      setContentClass("is-visible");
+      setNextIndex(null);
+    }, 320);
+    return () => {
+      clearTimeout(t1);
+      clearTimeout(t2);
     };
+  }, [nextIndex]);
 
-    const handlePrev = () => {
-        const prev = (active - 1 + projects.length) % projects.length;
-        handleTabChange(prev);
-    };
+  const getButtonConfig = (project) => {
+    const buttons = [];
 
-    useEffect(() => {
-        if (nextIndex === null) return;
-        setContentClass("is-exiting");
-        const t1 = setTimeout(() => {
-            setActive(nextIndex);
-            setContentClass("is-entering");
-        }, 180);
-        const t2 = setTimeout(() => {
-            setContentClass("is-visible");
-            setNextIndex(null);
-        }, 320);
-        return () => { clearTimeout(t1); clearTimeout(t2); };
-    }, [nextIndex]);
+    if (project.github) {
+      buttons.push({
+        href: project.github,
+        label: "Code",
+        icon: "⌨",
+        type: "github",
+      });
+    }
 
-    // Helper to determine button config based on project
-    const getButtonConfig = (project) => {
-        const buttons = [];
-        
-        // Always show code button if github exists
-        if (project.github) {
-            buttons.push({
-                href: project.github,
-                label: "Code",
-                icon: "⌨",
-                type: "github"
-            });
-        }
+    if (project.slug === "zestix-ai" && project.live) {
+      buttons.push({
+        href: project.live,
+        label: "Live Demo",
+        icon: "↗",
+        type: "live",
+      });
+    } else if (
+      project.slug === "brand-intelligence" ||
+      project.slug === "safe-vision"
+    ) {
+      buttons.push({
+        href: project.documentation || "#",
+        label: "Documentation",
+        icon: "📄",
+        type: "docs",
+      });
+    } else if (project.slug === "peleesenet") {
+      buttons.push({
+        href: project.pdf || "#",
+        label: "Research Paper",
+        icon: "📑",
+        type: "pdf",
+      });
+    } else if (project.live) {
+      buttons.push({
+        href: project.live,
+        label: "Live Demo",
+        icon: "↗",
+        type: "live",
+      });
+    }
 
-        // Determine second button based on project
-        if (project.slug === "zestix-ai" && project.live) {
-            buttons.push({
-                href: project.live,
-                label: "Live Demo",
-                icon: "↗",
-                type: "live"
-            });
-        } else if (project.slug === "brand-intelligence" || project.slug === "safe-vision") {
-            // Add documentation link (you'll need to add this to your project data)
-            buttons.push({
-                href: project.documentation || "#", // Add documentation URL to project data
-                label: "Documentation",
-                icon: "📄",
-                type: "docs"
-            });
-        } else if (project.slug === "peleesenet") {
-            // Add PDF link (you'll need to add this to your project data)
-            buttons.push({
-                href: project.pdf || "#", // Add PDF URL to project data
-                label: "Research Paper",
-                icon: "📑",
-                type: "pdf"
-            });
-        } else if (project.live) {
-            // Default: show live demo if available
-            buttons.push({
-                href: project.live,
-                label: "Live Demo",
-                icon: "↗",
-                type: "live"
-            });
-        }
+    return buttons;
+  };
 
-        return buttons;
-    };
+  const buttons = getButtonConfig(proj);
 
-    const buttons = getButtonConfig(proj);
-
-    const css = `
+  const css = `
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
 
 .pv2-wrap {
@@ -777,232 +788,655 @@ export default function Projects() {
     transition: transform 0.3s cubic-bezier(0.16,1,0.3,1);
 }
 .pv2-case-link:hover .pv2-case-arrow { transform: translateX(3px); }
-
-/* ── Responsive ── */
+/* ── Mobile Responsive ── */
 @media (max-width: 900px) {
-    .pv2-card-layout { grid-template-columns: 1fr; gap: 1.2rem; }
-    .pv2-project-image-wrap { max-width: 420px; margin: 0 auto; }
-    .pv2-nav-controls { display: none; }
+    .pv2-card-layout { 
+        grid-template-columns: 1fr; 
+        gap: 1rem; 
+    }
+    .pv2-project-image-wrap { 
+        max-width: 100%;
+        margin: 0;
+    }
+    .pv2-nav-controls { 
+        display: none; 
+    }
 }
-@media (max-width: 600px) {
-    .pv2-wrap { padding: 3.5rem 1rem 2.5rem; }
-    .pv2-card-inner { padding: 1.1rem 1.1rem; }
-    .pv2-tabs-row { gap: 0.28rem; }
-    .pv2-tab { padding: 0.30rem 0.58rem; }
-    .pv2-card-layout { gap: 1rem; }
+
+@media (max-width: 768px) {
+    .pv2-wrap { 
+        padding: 2rem 1rem 1.5rem; 
+    }
+    
+    .pv2-header {
+        margin-bottom: 1rem;
+    }
+    
+    .pv2-eyebrow {
+        gap: 0.35rem;
+        margin-bottom: 0.3rem;
+    }
+    
+    .pv2-eyebrow-line span:nth-child(1) { width: 12px; }
+    .pv2-eyebrow-line span:nth-child(2) { width: 6px; }
+    .pv2-eyebrow-line span:nth-child(3) { width: 3px; }
+    
+    .pv2-eyebrow-text {
+        font-size: 0.52rem;
+        letter-spacing: 0.20em;
+    }
+    
+    .pv2-title {
+        font-size: 1.4rem;
+        margin-bottom: 0.2rem;
+    }
+    
+    .pv2-subtitle {
+        display: none;
+    }
+    
+    /* Mobile tabs redesign - Flexible grid */
+    .pv2-tabs-row { 
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(90px, 1fr));
+        gap: 0.3rem;
+        margin-bottom: 1rem;
+        padding: 0;
+    }
+    
+    .pv2-tabs-row::before {
+        display: none;
+    }
+    
+    .pv2-tab { 
+        padding: 0.5rem 0.5rem;
+        flex-shrink: 1;
+        border-radius: 10px;
+        margin-right: 0;
+        min-width: 0;
+        width: 100%;
+        justify-content: center;
+    }
+    
+    .pv2-tab:last-child {
+        margin-right: 0;
+    }
+    
+    .pv2-tab-icon {
+        font-size: 0.95rem;
+        flex-shrink: 0;
+    }
+    
+    .pv2-tab-name {
+        font-size: 0.58rem;
+        font-weight: 600;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        text-align: center;
+    }
+    
+    .pv2-tab.is-active {
+        background: linear-gradient(135deg, rgba(59,130,246,0.25), rgba(96,165,250,0.15));
+        border-color: rgba(59,130,246,0.70);
+        box-shadow: 
+            0 0 0 1px rgba(59,130,246,0.30),
+            0 4px 12px rgba(59,130,246,0.35),
+            inset 0 1px 0 rgba(255,255,255,0.15);
+    }
+    
+    .pv2-tab.is-active .pv2-tab-name {
+        color: #fff;
+        font-weight: 700;
+    }
+    
+    .pv2-tab-dot {
+        display: none;
+    }
+    
+    .pv2-card {
+        border-radius: 16px;
+    }
+    
+    .pv2-card-inner { 
+        padding: 1rem; 
+    }
+    
+    .pv2-card-layout { 
+        gap: 0.75rem; 
+    }
+    
+    .pv2-project-image-wrap {
+        aspect-ratio: 16/9;
+        border-radius: 10px;
+    }
+    
+    .pv2-card-identity {
+        gap: 0.6rem;
+    }
+    
+    .pv2-card-icon {
+        width: 36px;
+        height: 36px;
+        font-size: 1rem;
+        border-radius: 9px;
+    }
+    
+    .pv2-card-icon-ring {
+        display: none;
+    }
+    
+    .pv2-card-title {
+        font-size: 0.95rem;
+        margin-bottom: 0.05rem;
+    }
+    
+    .pv2-card-period {
+        font-size: 0.56rem;
+    }
+    
+    .pv2-card-tagline {
+        display: none;
+    }
+    
+    .pv2-tags {
+        gap: 0.22rem;
+    }
+    
+    .pv2-tag {
+        font-size: 0.56rem;
+        padding: 0.18rem 0.45rem;
+        border-radius: 5px;
+    }
+    
+    .pv2-tag-dot {
+        width: 2.5px;
+        height: 2.5px;
+    }
+    
+    .pv2-actions {
+        gap: 0.3rem;
+    }
+    
+    .pv2-btn {
+        padding: 0.4rem 0.7rem;
+        font-size: 0.60rem;
+        border-radius: 7px;
+        flex: 1;
+    }
+    
+    .pv2-btn-icon {
+        font-size: 0.70rem;
+    }
+    
+    .pv2-sep {
+        display: none;
+    }
+    
+    .pv2-bullets {
+        gap: 0.25rem;
+    }
+    
+    .pv2-bullet {
+        font-size: 0.64rem;
+        padding: 0.35rem 0.55rem;
+        gap: 0.4rem;
+        border-radius: 7px;
+    }
+    
+    .pv2-bullet-icon {
+        font-size: 0.52rem;
+        margin-top: 0.12rem;
+    }
+    
+    .pv2-card-footer {
+        padding-top: 0.6rem;
+        margin-top: 0.3rem;
+    }
+    
+    .pv2-case-link {
+        font-size: 0.60rem;
+        padding: 0.35rem 0.65rem;
+        border-radius: 7px;
+        width: 100%;
+        justify-content: center;
+    }
+    
+    .pv2-corner-bracket {
+        display: none;
+    }
+    
+    .pv2-corner-glow {
+        display: none;
+    }
+    
+    .pv2-orb-1,
+    .pv2-orb-2,
+    .pv2-orb-3 {
+        opacity: 0.25;
+    }
+    
+    .pv2-orb-1 {
+        width: 300px;
+        height: 300px;
+    }
+    
+    .pv2-orb-2 {
+        width: 250px;
+        height: 250px;
+    }
+    
+    .pv2-orb-3 {
+        display: none;
+    }
+}
+
+@media (max-width: 480px) {
+    .pv2-wrap { 
+        padding: 1.5rem 0.75rem 1.25rem; 
+    }
+    
+    .pv2-header {
+        margin-bottom: 0.75rem;
+    }
+    
+    .pv2-eyebrow-line {
+        display: none;
+    }
+    
+    .pv2-eyebrow-text {
+        font-size: 0.50rem;
+    }
+    
+    .pv2-title {
+        font-size: 1.25rem;
+    }
+    
+    /* Mobile tabs for smaller screens - Flexible 2-3 columns */
+    .pv2-tabs-row {
+        grid-template-columns: repeat(auto-fit, minmax(85px, 1fr));
+        gap: 0.28rem;
+        margin-bottom: 0.75rem;
+    }
+    
+    .pv2-tab {
+        padding: 0.48rem 0.4rem;
+        border-radius: 9px;
+    }
+    
+    .pv2-tab-icon {
+        font-size: 0.88rem;
+    }
+    
+    .pv2-tab-name {
+        font-size: 0.56rem;
+    }
+    
+    .pv2-tab.is-active {
+        box-shadow: 
+            0 0 0 1px rgba(59,130,246,0.35),
+            0 3px 10px rgba(59,130,246,0.40),
+            inset 0 1px 0 rgba(255,255,255,0.12);
+    }
+    
+    .pv2-card {
+        border-radius: 14px;
+    }
+    
+    .pv2-card-inner {
+        padding: 0.85rem;
+    }
+    
+    .pv2-card-layout {
+        gap: 0.65rem;
+    }
+    
+    .pv2-card-identity {
+        gap: 0.5rem;
+    }
+    
+    .pv2-card-icon {
+        width: 32px;
+        height: 32px;
+        font-size: 0.92rem;
+        border-radius: 8px;
+    }
+    
+    .pv2-card-title {
+        font-size: 0.88rem;
+    }
+    
+    .pv2-card-period {
+        font-size: 0.52rem;
+    }
+    
+    .pv2-tags {
+        gap: 0.18rem;
+    }
+    
+    .pv2-tag {
+        font-size: 0.52rem;
+        padding: 0.16rem 0.4rem;
+    }
+    
+    .pv2-actions {
+        gap: 0.25rem;
+    }
+    
+    .pv2-btn {
+        padding: 0.38rem 0.65rem;
+        font-size: 0.58rem;
+    }
+    
+    .pv2-bullets {
+        gap: 0.22rem;
+    }
+    
+    .pv2-bullet {
+        font-size: 0.62rem;
+        padding: 0.32rem 0.5rem;
+        gap: 0.35rem;
+    }
+    
+    .pv2-bullet-icon {
+        font-size: 0.50rem;
+    }
+    
+    .pv2-card-footer {
+        padding-top: 0.5rem;
+        margin-top: 0.25rem;
+    }
+    
+    .pv2-case-link {
+        font-size: 0.58rem;
+        padding: 0.32rem 0.6rem;
+    }
+    
+    .pv2-project-image-wrap {
+        aspect-ratio: 4/3;
+    }
+    
+    .pv2-grid {
+        background-size: 30px 30px;
+    }
+}
+
+@media (max-width: 380px) {
+    .pv2-wrap {
+        padding: 1.25rem 0.65rem 1rem;
+    }
+    
+    .pv2-title {
+        font-size: 1.15rem;
+    }
+    
+    /* Mobile tabs for smallest screens - Flexible 2 columns minimum */
+    .pv2-tabs-row {
+        grid-template-columns: repeat(auto-fit, minmax(75px, 1fr));
+        gap: 0.25rem;
+    }
+    
+    .pv2-tab {
+        padding: 0.45rem 0.35rem;
+        border-radius: 8px;
+    }
+    
+    .pv2-tab-icon {
+        font-size: 0.82rem;
+    }
+    
+    .pv2-tab-name {
+        font-size: 0.54rem;
+    }
+    
+    .pv2-card-inner {
+        padding: 0.75rem;
+    }
+    
+    .pv2-btn {
+        font-size: 0.56rem;
+        padding: 0.36rem 0.6rem;
+    }
 }
     `;
 
-    return (
-        <>
-            <style dangerouslySetInnerHTML={{ __html: css }} />
-            <div className="pv2-wrap" ref={wrapRef}>
+  return (
+    <>
+      <style dangerouslySetInnerHTML={{ __html: css }} />
+      <div className="pv2-wrap" ref={wrapRef}>
+        <div className="pv2-orb pv2-orb-1" />
+        <div className="pv2-orb pv2-orb-2" />
+        <div className="pv2-orb pv2-orb-3" />
+        <div className="pv2-grid" />
 
-                <div className="pv2-orb pv2-orb-1" />
-                <div className="pv2-orb pv2-orb-2" />
-                <div className="pv2-orb pv2-orb-3" />
-                <div className="pv2-grid" />
-
-                <header className="pv2-header">
-                    <div className="pv2-eyebrow">
-                        <div className="pv2-eyebrow-line">
-                            <span /><span /><span />
-                        </div>
-                        <span className="pv2-eyebrow-text">Selected Work</span>
-                        <div className="pv2-eyebrow-line">
-                            <span /><span /><span />
-                        </div>
-                    </div>
-                    <h2 className="pv2-title">
-                        Featured <span className="pv2-title-grad">Projects</span>
-                    </h2>
-                    <p className="pv2-subtitle">
-                        A curated selection of my recent technical endeavors, showcasing modern web
-                        development, scalable architecture, and thoughtful UI/UX design.
-                    </p>
-                </header>
-
-                <div className="pv2-container">
-
-                    <div className="pv2-nav-controls">
-                        <button
-                            className="pv2-nav-btn-float pv2-nav-btn-prev"
-                            onClick={handlePrev}
-                            aria-label="Previous project"
-                        >
-                            <div className="pv2-nav-icon-float">
-                                <svg className="pv2-arrow-svg" viewBox="0 0 24 24">
-                                    <path d="M15 18l-6-6 6-6" />
-                                </svg>
-                            </div>
-                        </button>
-                        <button
-                            className="pv2-nav-btn-float pv2-nav-btn-next"
-                            onClick={handleNext}
-                            aria-label="Next project"
-                        >
-                            <div className="pv2-nav-icon-float">
-                                <svg className="pv2-arrow-svg" viewBox="0 0 24 24">
-                                    <path d="M9 18l6-6-6-6" />
-                                </svg>
-                            </div>
-                        </button>
-                    </div>
-
-                    <div className="pv2-tabs-row">
-                        {projects.map((p, i) => (
-                            <button
-                                key={i}
-                                className={`pv2-tab ${active === i ? "is-active" : ""}`}
-                                onClick={() => handleTabChange(i)}
-                            >
-                                <span className="pv2-tab-icon">{p.icon}</span>
-                                <span className="pv2-tab-name">{p.title}</span>
-                                <span className="pv2-tab-dot" />
-                            </button>
-                        ))}
-                    </div>
-
-                    <main className="pv2-card" ref={cardRef}>
-
-                        <div className="pv2-corner-glow pv2-corner-glow-tl" />
-                        <div className="pv2-corner-glow pv2-corner-glow-tr" />
-                        <div className="pv2-corner-glow pv2-corner-glow-bl" />
-                        <div className="pv2-corner-glow pv2-corner-glow-br" />
-
-                        <div className="pv2-corner-bracket pv2-corner-bracket-tl" />
-                        <div className="pv2-corner-bracket pv2-corner-bracket-tr" />
-                        <div className="pv2-corner-bracket pv2-corner-bracket-bl" />
-                        <div className="pv2-corner-bracket pv2-corner-bracket-br" />
-
-                        <div className="pv2-card-inner">
-                            <div className={`pv2-card-content ${contentClass}`}>
-                                <div className="pv2-card-layout">
-
-                                    {/* Image */}
-                                    <div className="pv2-project-image-wrap">
-                                        {proj.image ? (
-                                            <img
-                                                src={proj.image}
-                                                alt={proj.title}
-                                                className="pv2-project-image"
-                                            />
-                                        ) : (
-                                            <div className="pv2-project-image-placeholder">
-                                                {proj.icon}
-                                            </div>
-                                        )}
-                                    </div>
-
-                                    {/* Content */}
-                                    <div className="pv2-content-col">
-
-                                        <div className="pv2-card-identity">
-                                            <div className="pv2-card-icon-wrap">
-                                                <div
-                                                    className="pv2-card-icon"
-                                                    style={{
-                                                        background: c?.iconBg,
-                                                        border: `1px solid ${c?.iconBorder}`
-                                                    }}
-                                                >
-                                                    {proj.icon}
-                                                </div>
-                                                <div
-                                                    className="pv2-card-icon-ring"
-                                                    style={{ borderColor: c?.accent }}
-                                                />
-                                            </div>
-                                            <div className="pv2-card-meta">
-                                                <h3 className="pv2-card-title">{proj.title}</h3>
-                                                <div className="pv2-card-period">{proj.period}</div>
-                                                <div className="pv2-card-tagline">{proj.tagline}</div>
-                                            </div>
-                                        </div>
-
-                                        <div className="pv2-tags">
-                                            {proj.tags?.map((tag, i) => {
-                                                const cls = ["pv2-tag-blue", "pv2-tag-cyan", "pv2-tag-indigo"];
-                                                return (
-                                                    <span key={i} className={`pv2-tag ${cls[i % cls.length]}`}>
-                                                        <span className="pv2-tag-dot" />
-                                                        {tag}
-                                                    </span>
-                                                );
-                                            })}
-                                        </div>
-
-                                        {/* Dynamic Buttons per project */}
-                                        <div className="pv2-actions">
-                                            {buttons.map((btn, i) => (
-                                                <Link
-                                                    key={i}
-                                                    href={btn.href}
-                                                    target="_blank"
-                                                    rel="noopener noreferrer"
-                                                    className={`pv2-btn pv2-btn-${btn.type === "github" ? "gh" : btn.type === "live" ? "live" : btn.type === "docs" ? "docs" : "pdf"}`}
-                                                >
-                                                    <span className="pv2-btn-icon">{btn.icon}</span>
-                                                    {btn.label}
-                                                </Link>
-                                            ))}
-                                        </div>
-
-                                        <div className="pv2-sep">
-                                            <span className="pv2-sep-label">Key Features</span>
-                                            <div className="pv2-sep-line" />
-                                        </div>
-
-                                        <ul className="pv2-bullets">
-                                            {proj.bullets?.map((bullet, i) => (
-                                                <li key={i} className="pv2-bullet">
-                                                    <span
-                                                        className="pv2-bullet-icon"
-                                                        style={{ color: c?.accent }}
-                                                    >
-                                                        ✦
-                                                    </span>
-                                                    {bullet}
-                                                </li>
-                                            ))}
-                                        </ul>
-
-                                        <div className="pv2-card-footer">
-                                            {proj.slug && (
-                                                <Link
-                                                    href={`/projects/${proj.slug}`}
-                                                    target="_blank"
-                                                    rel="noopener noreferrer"
-                                                    className="pv2-case-link"
-                                                >
-                                                    View Case Study
-                                                    <span className="pv2-case-arrow">
-                                                        <svg
-                                                            width="14"
-                                                            height="14"
-                                                            viewBox="0 0 24 24"
-                                                            fill="none"
-                                                            stroke="currentColor"
-                                                            strokeWidth="2.5"
-                                                            strokeLinecap="round"
-                                                            strokeLinejoin="round"
-                                                        >
-                                                            <path d="M5 12h14M12 5l7 7-7 7" />
-                                                        </svg>
-                                                    </span>
-                                                </Link>
-                                            )}
-                                        </div>
-
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </main>
-
-                </div>
+        <header className="pv2-header">
+          <div className="pv2-eyebrow">
+            <div className="pv2-eyebrow-line">
+              <span />
+              <span />
+              <span />
             </div>
-        </>
-    );
-}
+            <span className="pv2-eyebrow-text">Selected Work</span>
+            <div className="pv2-eyebrow-line">
+              <span />
+              <span />
+              <span />
+            </div>
+          </div>
+          <h2 className="pv2-title">
+            Featured <span className="pv2-title-grad">Projects</span>
+          </h2>
+          <p className="pv2-subtitle">
+            A curated selection of my recent technical endeavors, showcasing
+            modern web development, scalable architecture, and thoughtful UI/UX
+            design.
+          </p>
+        </header>
 
+        <div className="pv2-container">
+          <div className="pv2-nav-controls">
+            <button
+              className="pv2-nav-btn-float pv2-nav-btn-prev"
+              onClick={handlePrev}
+              aria-label="Previous project"
+            >
+              <div className="pv2-nav-icon-float">
+                <svg className="pv2-arrow-svg" viewBox="0 0 24 24">
+                  <path d="M15 18l-6-6 6-6" />
+                </svg>
+              </div>
+            </button>
+            <button
+              className="pv2-nav-btn-float pv2-nav-btn-next"
+              onClick={handleNext}
+              aria-label="Next project"
+            >
+              <div className="pv2-nav-icon-float">
+                <svg className="pv2-arrow-svg" viewBox="0 0 24 24">
+                  <path d="M9 18l6-6-6-6" />
+                </svg>
+              </div>
+            </button>
+          </div>
+
+          <div className="pv2-tabs-row">
+            {projects.map((p, i) => (
+              <button
+                key={i}
+                className={`pv2-tab ${active === i ? "is-active" : ""}`}
+                onClick={() => handleTabChange(i)}
+              >
+                <span className="pv2-tab-icon">{p.icon}</span>
+                <span className="pv2-tab-name">{p.title}</span>
+                <span className="pv2-tab-dot" />
+              </button>
+            ))}
+          </div>
+
+          <main className="pv2-card" ref={cardRef}>
+            <div className="pv2-corner-glow pv2-corner-glow-tl" />
+            <div className="pv2-corner-glow pv2-corner-glow-tr" />
+            <div className="pv2-corner-glow pv2-corner-glow-bl" />
+            <div className="pv2-corner-glow pv2-corner-glow-br" />
+
+            <div className="pv2-corner-bracket pv2-corner-bracket-tl" />
+            <div className="pv2-corner-bracket pv2-corner-bracket-tr" />
+            <div className="pv2-corner-bracket pv2-corner-bracket-bl" />
+            <div className="pv2-corner-bracket pv2-corner-bracket-br" />
+
+            <div className="pv2-card-inner">
+              <div className={`pv2-card-content ${contentClass}`}>
+                <div className="pv2-card-layout">
+                  {/* Image */}
+                  <div className="pv2-project-image-wrap">
+                    {proj.image ? (
+                      <img
+                        src={proj.image}
+                        alt={proj.title}
+                        className="pv2-project-image"
+                      />
+                    ) : (
+                      <div className="pv2-project-image-placeholder">
+                        {proj.icon}
+                      </div>
+                    )}
+                  </div>
+
+                  {/* Content */}
+                  <div className="pv2-content-col">
+                    <div className="pv2-card-identity">
+                      <div className="pv2-card-icon-wrap">
+                        <div
+                          className="pv2-card-icon"
+                          style={{
+                            background: c?.iconBg,
+                            border: `1px solid ${c?.iconBorder}`,
+                          }}
+                        >
+                          {proj.icon}
+                        </div>
+                        <div
+                          className="pv2-card-icon-ring"
+                          style={{ borderColor: c?.accent }}
+                        />
+                      </div>
+                      <div className="pv2-card-meta">
+                        <h3 className="pv2-card-title">{proj.title}</h3>
+                        <div className="pv2-card-period">{proj.period}</div>
+                        {!isMobile && (
+                          <div className="pv2-card-tagline">{proj.tagline}</div>
+                        )}
+                      </div>
+                    </div>
+
+                    <div className="pv2-tags">
+                      {(isMobile ? proj.tags?.slice(0, 3) : proj.tags)?.map(
+                        (tag, i) => {
+                          const cls = [
+                            "pv2-tag-blue",
+                            "pv2-tag-cyan",
+                            "pv2-tag-indigo",
+                          ];
+                          return (
+                            <span
+                              key={i}
+                              className={`pv2-tag ${cls[i % cls.length]}`}
+                            >
+                              <span className="pv2-tag-dot" />
+                              {tag}
+                            </span>
+                          );
+                        },
+                      )}
+                    </div>
+
+                    <div className="pv2-actions">
+                      {buttons.map((btn, i) => (
+                        <Link
+                          key={i}
+                          href={btn.href}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className={`pv2-btn pv2-btn-${btn.type === "github" ? "gh" : btn.type === "live" ? "live" : btn.type === "docs" ? "docs" : "pdf"}`}
+                        >
+                          <span className="pv2-btn-icon">{btn.icon}</span>
+                          {btn.label}
+                        </Link>
+                      ))}
+                    </div>
+
+                    {!isMobile && (
+                      <>
+                        <div className="pv2-sep">
+                          <span className="pv2-sep-label">Key Features</span>
+                          <div className="pv2-sep-line" />
+                        </div>
+
+                        <ul className="pv2-bullets">
+                          {proj.bullets?.map((bullet, i) => (
+                            <li key={i} className="pv2-bullet">
+                              <span
+                                className="pv2-bullet-icon"
+                                style={{ color: c?.accent }}
+                              >
+                                ✦
+                              </span>
+                              {bullet}
+                            </li>
+                          ))}
+                        </ul>
+                      </>
+                    )}
+
+                    {isMobile && (
+                      <ul className="pv2-bullets">
+                        {proj.bullets?.slice(0, 2).map((bullet, i) => (
+                          <li key={i} className="pv2-bullet">
+                            <span
+                              className="pv2-bullet-icon"
+                              style={{ color: c?.accent }}
+                            >
+                              ✦
+                            </span>
+                            {bullet}
+                          </li>
+                        ))}
+                      </ul>
+                    )}
+
+                    <div className="pv2-card-footer">
+                      {proj.slug && (
+                        <Link
+                          href={`/projects/${proj.slug}`}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="pv2-case-link"
+                        >
+                          {isMobile ? "View More" : "View Case Study"}
+                          <span className="pv2-case-arrow">
+                            <svg
+                              width="14"
+                              height="14"
+                              viewBox="0 0 24 24"
+                              fill="none"
+                              stroke="currentColor"
+                              strokeWidth="2.5"
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                            >
+                              <path d="M5 12h14M12 5l7 7-7 7" />
+                            </svg>
+                          </span>
+                        </Link>
+                      )}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </main>
+        </div>
+      </div>
+    </>
+  );
+}

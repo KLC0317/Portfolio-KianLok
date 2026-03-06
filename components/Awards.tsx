@@ -264,7 +264,7 @@ export default function Awards() {
   const { ref: sectionRef, inView } = useInView(0.08)
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null)
 
-  const css = `
+const css = `
     @keyframes fadeSlideUp {
       from { opacity: 0; transform: translateY(32px); }
       to   { opacity: 1; transform: translateY(0); }
@@ -292,10 +292,6 @@ export default function Awards() {
     @keyframes labelPulse {
       0%, 100% { opacity: 1; }
       50%       { opacity: 0.6; }
-    }
-    @keyframes titleGlowPulse {
-      0%, 100% { text-shadow: 0 0 8px currentColor; }
-      50%       { text-shadow: 0 0 18px currentColor, 0 0 32px currentColor; }
     }
 
     ${Array.from({ length: 6 })
@@ -609,18 +605,431 @@ export default function Awards() {
 
     /* ── Responsive ── */
     @media (max-width: 860px) {
-      .aw-grid { grid-template-columns: 1fr 1fr; }
-      .aw-card-featured { grid-column: span 2; }
-      .aw-card-tall { grid-row: span 1; }
+      .aw-grid { 
+        grid-template-columns: 1fr 1fr; 
+      }
+      .aw-card-featured { 
+        grid-column: span 2; 
+      }
+      .aw-card-tall { 
+        grid-row: span 1; 
+      }
     }
-    @media (max-width: 540px) {
-      .aw-grid { grid-template-columns: 1fr; }
-      .aw-card-featured { grid-column: span 1; }
-      .aw-card-featured .aw-card-inner { flex-direction: column; }
-      .aw-card-tall { grid-row: span 1; }
+
+    @media (max-width: 768px) {
+      .aw-wrap {
+        padding: 3rem 1rem 2.5rem;
+        min-height: auto;
+      }
+
+      .aw-ambient-blob {
+        opacity: 0.025;
+        filter: blur(60px);
+      }
+
+      .aw-ambient-blob:first-child {
+        width: 350px;
+        height: 350px;
+      }
+
+      .aw-ambient-blob:last-child {
+        width: 300px;
+        height: 300px;
+      }
+
+      .aw-header {
+        margin-bottom: 1.5rem;
+      }
+
+      .aw-label {
+        font-size: 0.60rem;
+        gap: 0.4rem;
+        margin-bottom: 0.5rem;
+      }
+
+      .aw-label-line {
+        width: 15px;
+      }
+
+      .aw-label-dot {
+        width: 3px;
+        height: 3px;
+      }
+
+      .aw-title {
+        font-size: clamp(1.5rem, 5vw, 1.9rem);
+      }
+
+      .aw-subtitle {
+        font-size: 0.76rem;
+        margin-top: 0.45rem;
+      }
+
+      /* Compact 2-row grid layout */
+      .aw-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        grid-template-rows: auto auto;
+        gap: 0.7rem;
+      }
+
+      /* Featured card spans full width */
+      .aw-card-featured {
+        grid-column: 1 / -1;
+      }
+
+      .aw-card {
+        border-radius: 10px;
+      }
+
+      .aw-card:hover {
+        transform: scale(1.01);
+      }
+
+      .aw-card-inner {
+        padding: 0.9rem;
+        gap: 0.6rem;
+      }
+
+      .aw-accent-bar {
+        border-radius: 10px 10px 0 0;
+        height: 1.5px;
+      }
+
+      .aw-orb {
+        width: 70px;
+        height: 70px;
+        bottom: -18px;
+        right: -18px;
+      }
+
+      .aw-icon-ring {
+        inset: -3px;
+      }
+
+      .aw-row {
+        gap: 0.3rem;
+        margin-bottom: 0.5rem;
+      }
+
+      .aw-year-badge {
+        font-size: 0.52rem;
+        padding: 0.13rem 0.35rem;
+      }
+
+      .aw-card-title {
+        font-size: 0.76rem;
+        line-height: 1.25;
+        margin-bottom: 0.25rem;
+      }
+
+      .aw-card-org {
+        font-size: 0.62rem;
+        line-height: 1.35;
+      }
+
+      .aw-card-desc {
+        font-size: 0.68rem;
+        line-height: 1.5;
+      }
+
+      /* Featured card - horizontal layout */
+      .aw-card-featured .aw-card-inner {
+        flex-direction: row;
+        padding: 1rem;
+        gap: 0.9rem;
+      }
+
+      .aw-card-featured .aw-card-content {
+        gap: 0.3rem;
+      }
+
+      .aw-card-featured .aw-card-title {
+        font-size: 0.88rem;
+      }
+
+      .aw-card-featured .aw-card-org {
+        font-size: 0.66rem;
+      }
+
+      .aw-card-featured .aw-card-desc {
+        font-size: 0.72rem;
+      }
+
+      /* Reset tall card */
+      .aw-card-tall {
+        grid-row: auto;
+      }
+
+      .aw-card-tall .aw-card-inner {
+        padding: 0.9rem;
+      }
+
+      .aw-card-tall .aw-card-title {
+        font-size: 0.76rem;
+      }
+
+      .aw-card-tall .aw-card-org {
+        font-size: 0.62rem;
+      }
+
+      .aw-card-tall .aw-card-desc {
+        font-size: 0.68rem;
+      }
+
+      /* Normal card */
+      .aw-card-normal .aw-card-title {
+        font-size: 0.76rem;
+      }
+
+      .aw-card-normal .aw-card-org {
+        font-size: 0.62rem;
+      }
+
+      .aw-card-normal .aw-card-desc {
+        font-size: 0.68rem;
+      }
+    }
+
+    @media (max-width: 640px) {
+      .aw-wrap {
+        padding: 2.5rem 0.85rem 2rem;
+      }
+
+      .aw-header {
+        margin-bottom: 1.3rem;
+      }
+
+      .aw-label {
+        font-size: 0.56rem;
+        gap: 0.35rem;
+      }
+
+      .aw-label-line {
+        width: 13px;
+      }
+
+      .aw-title {
+        font-size: clamp(1.4rem, 6vw, 1.7rem);
+      }
+
+      .aw-subtitle {
+        font-size: 0.72rem;
+      }
+
+      .aw-grid {
+        gap: 0.65rem;
+      }
+
+      .aw-card {
+        border-radius: 9px;
+      }
+
+      .aw-card-inner {
+        padding: 0.85rem;
+        gap: 0.55rem;
+      }
+
+      .aw-accent-bar {
+        border-radius: 9px 9px 0 0;
+      }
+
+      .aw-orb {
+        width: 65px;
+        height: 65px;
+        bottom: -16px;
+        right: -16px;
+      }
+
+      .aw-row {
+        margin-bottom: 0.45rem;
+      }
+
+      .aw-year-badge {
+        font-size: 0.50rem;
+        padding: 0.12rem 0.33rem;
+      }
+
+      .aw-card-title {
+        font-size: 0.72rem;
+        margin-bottom: 0.22rem;
+      }
+
+      .aw-card-org {
+        font-size: 0.60rem;
+      }
+
+      .aw-card-desc {
+        font-size: 0.66rem;
+        line-height: 1.48;
+      }
+
+      /* Featured card - stack vertically on small screens */
+      .aw-card-featured .aw-card-inner {
+        flex-direction: column;
+        padding: 0.95rem;
+        gap: 0.75rem;
+      }
+
+      .aw-card-featured .aw-card-title {
+        font-size: 0.82rem;
+      }
+
+      .aw-card-featured .aw-card-org {
+        font-size: 0.64rem;
+      }
+
+      .aw-card-featured .aw-card-desc {
+        font-size: 0.70rem;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .aw-wrap {
+        padding: 2.2rem 0.75rem 1.8rem;
+      }
+
+      .aw-header {
+        margin-bottom: 1.2rem;
+      }
+
+      .aw-label {
+        font-size: 0.54rem;
+      }
+
+      .aw-label-line {
+        width: 12px;
+      }
+
+      .aw-title {
+        font-size: clamp(1.3rem, 7vw, 1.6rem);
+      }
+
+      .aw-subtitle {
+        font-size: 0.70rem;
+      }
+
+      .aw-grid {
+        gap: 0.6rem;
+      }
+
+      .aw-card-inner {
+        padding: 0.8rem;
+        gap: 0.5rem;
+      }
+
+      .aw-orb {
+        width: 60px;
+        height: 60px;
+        bottom: -15px;
+        right: -15px;
+      }
+
+      .aw-row {
+        margin-bottom: 0.4rem;
+      }
+
+      .aw-year-badge {
+        font-size: 0.48rem;
+        padding: 0.11rem 0.3rem;
+      }
+
+      .aw-card-title {
+        font-size: 0.70rem;
+        margin-bottom: 0.2rem;
+      }
+
+      .aw-card-org {
+        font-size: 0.58rem;
+      }
+
+      .aw-card-desc {
+        font-size: 0.64rem;
+        line-height: 1.45;
+      }
+
+      .aw-card-featured .aw-card-inner {
+        padding: 0.9rem;
+        gap: 0.7rem;
+      }
+
+      .aw-card-featured .aw-card-title {
+        font-size: 0.78rem;
+      }
+
+      .aw-card-featured .aw-card-org {
+        font-size: 0.62rem;
+      }
+
+      .aw-card-featured .aw-card-desc {
+        font-size: 0.68rem;
+      }
+    }
+
+    @media (max-width: 380px) {
+      .aw-wrap {
+        padding: 2rem 0.65rem 1.6rem;
+      }
+
+      .aw-header {
+        margin-bottom: 1.1rem;
+      }
+
+      .aw-label {
+        font-size: 0.52rem;
+      }
+
+      .aw-title {
+        font-size: 1.25rem;
+      }
+
+      .aw-subtitle {
+        font-size: 0.68rem;
+      }
+
+      .aw-grid {
+        gap: 0.55rem;
+      }
+
+      .aw-card-inner {
+        padding: 0.75rem;
+        gap: 0.48rem;
+      }
+
+      .aw-year-badge {
+        font-size: 0.46rem;
+        padding: 0.1rem 0.28rem;
+      }
+
+      .aw-card-title {
+        font-size: 0.68rem;
+      }
+
+      .aw-card-org {
+        font-size: 0.56rem;
+      }
+
+      .aw-card-desc {
+        font-size: 0.62rem;
+      }
+
+      .aw-card-featured .aw-card-inner {
+        padding: 0.85rem;
+      }
+
+      .aw-card-featured .aw-card-title {
+        font-size: 0.76rem;
+      }
+
+      .aw-card-featured .aw-card-org {
+        font-size: 0.60rem;
+      }
+
+      .aw-card-featured .aw-card-desc {
+        font-size: 0.66rem;
+      }
     }
   `
-
   return (
     <>
       <style dangerouslySetInnerHTML={{ __html: css }} />

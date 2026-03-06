@@ -25,7 +25,7 @@ export default function Hero({ visible }: HeroProps) {
     const els = [
       { el: eyebrowRef.current, delay: 200 },
       { el: nameRef.current, delay: 380 },
-      { el: roleRef.current,    delay: 500 },
+      { el: roleRef.current, delay: 500 },
       { el: headRef.current, delay: 540 },
       { el: subRef.current, delay: 760 },
       { el: badgesRef.current, delay: 920 },
@@ -401,8 +401,84 @@ overflow: hidden;
   color: rgba(255,255,255,0.30);
   writing-mode: vertical-rl;
 }
+/* ── Mobile Responsive ── */
+@media (max-width: 768px) {
+  .hero {
+    padding: 0 1.5rem;
+    justify-content: flex-start;
+    padding-top: 6rem;
+  }
 
+  .hero-eyebrow {
+    font-size: 0.55rem;
+    margin-bottom: 1.2rem;
+  }
 
+  .eyebrow-pill {
+    padding: 0.20rem 0.65rem 0.20rem 0.45rem;
+  }
+
+  .hero-name {
+    font-size: 0.85rem;
+    margin-bottom: 0.4rem;
+  }
+
+  .hero-role {
+    font-size: 0.65rem;
+    gap: 0.4rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .hero-role-line {
+    width: 18px;
+  }
+
+  .ht-main {
+    font-size: clamp(2rem, 8vw, 2.8rem);
+  }
+
+  .hero-head {
+    margin-bottom: 1.2rem;
+  }
+
+  .hero-sub {
+    font-size: 0.82rem;
+    line-height: 1.7;
+    margin-bottom: 1.5rem;
+  }
+
+  .hero-badges {
+    gap: 0.35rem;
+    margin-bottom: 1.8rem;
+  }
+
+  .bdg {
+    font-size: 0.60rem;
+    padding: 0.22rem 0.60rem;
+  }
+
+  .hero-cta {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.75rem;
+  }
+
+  .btn-primary,
+  .btn-ghost {
+    justify-content: center;
+    padding: 0.70rem 1.5rem;
+    font-size: 0.80rem;
+  }
+
+  .scroll-indicator {
+    display: none;
+  }
+
+  .hero-glow-1,
+  .hero-glow-2 {
+    display: none;
+  }
+}
 `;
 
   const purpleBadges = [
@@ -443,7 +519,6 @@ overflow: hidden;
           AI Engineer &amp; Full-Stack Developer
         </div>
 
-
         {/* Headline */}
         <div ref={headRef} className="hero-head" style={anim}>
           <div className="ht-main">
@@ -463,13 +538,19 @@ overflow: hidden;
         {/* Badges */}
         <div ref={badgesRef} className="hero-badges" style={anim}>
           {purpleBadges.map((s) => (
-            <span key={s} className="bdg bdg-purple">{s}</span>
+            <span key={s} className="bdg bdg-purple">
+              {s}
+            </span>
           ))}
           {cyanBadges.map((s) => (
-            <span key={s} className="bdg bdg-cyan">{s}</span>
+            <span key={s} className="bdg bdg-cyan">
+              {s}
+            </span>
           ))}
           {pinkBadges.map((s) => (
-            <span key={s} className="bdg bdg-pink">{s}</span>
+            <span key={s} className="bdg bdg-pink">
+              {s}
+            </span>
           ))}
         </div>
 
@@ -478,9 +559,11 @@ overflow: hidden;
           <a
             href="#projects"
             className="btn-primary"
-            onClick={e => {
-              e.preventDefault()
-              document.getElementById('slide-container')?.scrollTo({ top: window.innerHeight * 1, behavior: 'smooth' })
+            onClick={(e) => {
+              e.preventDefault();
+              document
+                .getElementById("slide-container")
+                ?.scrollTo({ top: window.innerHeight * 1, behavior: "smooth" });
             }}
           >
             View Projects
@@ -488,22 +571,22 @@ overflow: hidden;
           <a
             href="#contact"
             className="btn-ghost"
-            onClick={e => {
-              e.preventDefault()
-              document.getElementById('slide-container')?.scrollTo({ top: window.innerHeight * 5, behavior: 'smooth' })
+            onClick={(e) => {
+              e.preventDefault();
+              document
+                .getElementById("slide-container")
+                ?.scrollTo({ top: window.innerHeight * 5, behavior: "smooth" });
             }}
           >
             Let&apos;s Talk
           </a>
         </div>
 
-
         {/* Scroll */}
         <div className="scroll-indicator">
           <div className="scroll-line" />
           <span className="scroll-label">Scroll</span>
         </div>
-
       </section>
     </>
   );
